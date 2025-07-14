@@ -27,7 +27,6 @@ const Navbar = () => {
           <li>
             <a href="#">Support</a>
           </li>
-          <MdOutlineDownloading className={styles.download_icon} />
 
           <li>
             <a href="#">Download</a>
@@ -35,6 +34,8 @@ const Navbar = () => {
           <li>
             <span className={styles.separator}>|</span>
           </li>
+          <MdOutlineDownloading className={styles.download_icon} />
+
           <li>
             <a href="#">Install App</a>
           </li>
