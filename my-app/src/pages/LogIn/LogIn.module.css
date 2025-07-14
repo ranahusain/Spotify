@@ -1,4 +1,4 @@
-* {
+.maha_container {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -17,7 +17,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: 90vh;
 }
 
 .container_bg {
@@ -38,15 +38,10 @@
   margin-bottom: 20px;
 }
 
-h1 {
+.heading {
   font-size: 30px;
   font-weight: bolder;
   margin-bottom: 30px;
-}
-
-h1 span {
-  display: block;
-  font-weight: bold;
 }
 
 .form {

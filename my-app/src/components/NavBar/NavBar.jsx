@@ -4,6 +4,7 @@ import { FaSpotify } from "react-icons/fa";
 import { IoFolderOpenOutline } from "react-icons/io5";
 import { IoSearch } from "react-icons/io5";
 import { MdOutlineDownloading } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -22,14 +23,14 @@ const Navbar = () => {
 
         <ul className={styles.nav_right}>
           <li>
-            <a href="#">Premium</a>
+            <Link to="#">Premium</Link>
           </li>
           <li>
-            <a href="#">Support</a>
+            <Link to="#">Support</Link>
           </li>
 
           <li>
-            <a href="#">Download</a>
+            <Link to="#">Download</Link>
           </li>
           <li>
             <span className={styles.separator}>|</span>
@@ -37,15 +38,17 @@ const Navbar = () => {
           <MdOutlineDownloading className={styles.download_icon} />
 
           <li>
-            <a href="#">Install App</a>
+            <Link to="#">Install App</Link>
           </li>
           <li>
-            <a href="#">Signup</a>
+            <Link to="/SignUp">Signup</Link>
           </li>
           <li>
-            <button type="button" className={styles.nav_btn}>
-              Login
-            </button>
+            <Link to="/LogIn">
+              <button type="button" className={styles.nav_btn}>
+                Login
+              </button>
+            </Link>
           </li>
         </ul>
       </nav>
