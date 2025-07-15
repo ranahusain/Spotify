@@ -4,7 +4,9 @@ const dotenv = require("dotenv");
 dotenv.config();
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI);
+    const conn = await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+    });
     console.log("MongoDB Connected");
   } catch (error) {
     console.error(error.message);
