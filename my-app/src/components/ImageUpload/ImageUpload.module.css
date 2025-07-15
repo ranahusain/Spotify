@@ -1,0 +1,50 @@
+/* ImageUpload.module.css */
+
+.uploadContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px;
+  margin: 40px auto;
+  max-width: 400px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.uploadInput {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.uploadButton {
+  padding: 12px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #1db954;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.uploadButton:hover:not(:disabled) {
+  background-color: #17a74a;
+}
+
+.uploadButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.uploadURL {
+  margin-top: 20px;
+  word-break: break-all;
+  color: #222;
+  font-size: 14px;
+  text-align: center;
+}
