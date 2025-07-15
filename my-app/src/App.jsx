@@ -10,7 +10,7 @@ import {
 import HomePage from "./pages/HomePage/HomePage";
 import LogIn from "./pages/LogIn/LogIn";
 import SignUp from "./pages/SignUp/SignUp";
-import ImageUpload from "./components/ImageUpload/ImageUpload";
+import AddSong from "./pages/AddSong/AddSong";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -18,7 +18,7 @@ const router = createBrowserRouter(
       <Route path="/" element={<HomePage />} />
       <Route path="/SignUp" element={<SignUp />} />
       <Route path="/LogIn" element={<LogIn />} />
-      <Route path="/ImageUpload" element={<ImageUpload />} />
+      <Route path="/AddSong" element={<AddSong />} />
     </>
   )
 );

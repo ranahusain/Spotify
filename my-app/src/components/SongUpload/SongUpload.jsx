@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../../supabaseClient";
-import styles from "./ImageUpload.module.css";
-const ImageUpload = () => {
+import styles from "./SongUpload.module.css";
+const SongUpload = () => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [fileURL, setFileURL] = useState("");
@@ -50,12 +50,12 @@ const ImageUpload = () => {
   return (
     <>
       <div className={styles.uploadContainer}>
-        <label className={styles.uploadLabel}>Image Upload</label>
+        <label className={styles.uploadLabel}>Song Upload</label>
         <input
           type="file"
           onChange={handleFileChange}
           className={styles.uploadInput}
-          accept=".png, .jpeg, .jpg"
+          accept=".mp3"
         />
         <button
           onClick={handleUpload}
@@ -70,4 +70,4 @@ const ImageUpload = () => {
   );
 };
 
-export default ImageUpload;
+export default SongUpload;

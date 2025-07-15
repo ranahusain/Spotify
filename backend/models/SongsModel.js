@@ -17,6 +17,11 @@ const SongSchema = new Schema({
     required: true,
     trimr: true,
   },
+  song: {
+    type: String,
+    required: true,
+    trimr: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
