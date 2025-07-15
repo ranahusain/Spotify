@@ -1,14 +1,50 @@
-import { useState } from "react";
 import styles from "./SignUp.module.css";
 import { BsSpotify } from "react-icons/bs";
 import { FaGithub } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 const SignUp = () => {
   const [step, setStep] = useState(1);
   const handleNext = (e) => {
     e.preventDefault();
     if (step < 3) {
       setStep(step + 1);
+    } else {
+      submitForm(e);
+    }
+  };
+
+  //signup
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const submitForm = async (e) => {
+    e.preventDefault();
+    const newUser = { name, email, password };
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/signup/",
+        newUser
+      );
+
+      if (res.data.success) {
+        if (res.data.token) {
+          const loggedInUser = res.data.user.name;
+          console.log(loggedInUser);
+          localStorage.setItem("user", loggedInUser);
+          localStorage.setItem("token", res.data.token);
+          return navigate("/");
+        }
+      } else {
+        console.log("SignUp failed");
+      }
+      return res.data;
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -31,6 +67,8 @@ const SignUp = () => {
                   name="name"
                   placeholder="John Doe"
                   required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                 />
               </>
             )}
@@ -43,6 +81,8 @@ const SignUp = () => {
                   name="email"
                   placeholder="name@domain.com"
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </>
             )}
@@ -55,6 +95,8 @@ const SignUp = () => {
                   name="password"
                   placeholder="Example5%"
                   required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </>
             )}

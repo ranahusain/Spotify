@@ -4,9 +4,33 @@ import { FaSpotify } from "react-icons/fa";
 import { IoFolderOpenOutline } from "react-icons/io5";
 import { IoSearch } from "react-icons/io5";
 import { MdOutlineDownloading } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const Navbar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const name = localStorage.getItem("user");
+    if (token && name) {
+      setIsLoggedIn(true);
+      setUsername(name);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    setUsername("");
+    navigate("/");
+  };
+
   return (
     <div>
       <nav className={styles.navbar}>
@@ -40,16 +64,37 @@ const Navbar = () => {
           <li>
             <Link to="#">Install App</Link>
           </li>
-          <li>
-            <Link to="/SignUp">Signup</Link>
-          </li>
-          <li>
-            <Link to="/LogIn">
-              <button type="button" className={styles.nav_btn}>
-                Login
-              </button>
-            </Link>
-          </li>
+          {isLoggedIn ? (
+            <>
+              <li>
+                <h3>Welcome, {username}</h3>
+              </li>
+              <li>
+                <Link to="/">
+                  <button
+                    type="button"
+                    className={styles.nav_btn}
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </Link>
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <Link to="/SignUp">Signup</Link>
+              </li>
+              <li>
+                <Link to="/LogIn">
+                  <button type="button" className={styles.nav_btn}>
+                    Login
+                  </button>
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
       </nav>
     </div>
