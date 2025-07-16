@@ -11,8 +11,12 @@ const HomePage = () => {
     const token = localStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);
+      console.log("log in true set hogya");
+      console.log(isLoggedIn);
     } else {
       setIsLoggedIn(false);
+      console.log("log in false set hogya");
+      console.log(isLoggedIn);
     }
   }, []);
 

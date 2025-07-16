@@ -5,22 +5,41 @@ const SongSchema = new Schema({
   songname: {
     type: String,
     required: true,
-    trimr: true,
+    trim: true,
   },
-  artistname: {
-    type: String,
-    required: true,
-    trimr: true,
+  artist: {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    imageURL: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+  },
+  album: {
+    name: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    imageURL: {
+      type: String,
+      trim: true,
+      default: "",
+    },
   },
   imageURL: {
     type: String,
     required: true,
-    trimr: true,
+    trim: true,
   },
   songURL: {
     type: String,
     required: true,
-    trimr: true,
+    trim: true,
   },
   createdAt: {
     type: Date,

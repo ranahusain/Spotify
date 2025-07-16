@@ -4,24 +4,51 @@ const Song = require("../models/SongsModel");
 
 router.post("/addsong", async (req, res) => {
   try {
-    const { songname, artistname, imageURL, songURL } = req.body;
+    const {
+      songname,
+      artistName,
+      artistImageURL,
+      imageURL,
+      songURL,
+      albumName,
+      albumImageURL,
+    } = req.body;
+
     const existingSong = await Song.findOne({ songname });
+
     if (existingSong) {
       return res.status(409).json({
         success: false,
         message: "Song already exists with this name",
       });
     }
-    const newSong = new Song({ songname, artistname, imageURL, songURL });
+
+    const newSong = new Song({
+      songname,
+      artist: {
+        name: artistName,
+        imageURL: artistImageURL,
+      },
+      album: {
+        name: albumName || "",
+        imageURL: albumImageURL || "",
+      },
+      imageURL,
+      songURL,
+    });
+
     await newSong.save();
+
     res.status(200).json({
       success: true,
+      message: "Song added successfully",
+      song: newSong,
     });
   } catch (error) {
-    console.error("Error while adding song:", err);
+    console.error("Error while adding song:", error);
     res.status(500).json({
       success: false,
-      message: err.message,
+      message: error.message,
     });
   }
 });
@@ -33,7 +60,7 @@ router.get("/getsong", async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: err.message,
+      message: error.message,
     });
   }
 });
