@@ -4,7 +4,7 @@ const Song = require("../models/SongsModel");
 
 router.post("/addsong", async (req, res) => {
   try {
-    const { songname, artistname, image } = req.body;
+    const { songname, artistname, imageURL, songURL } = req.body;
     const existingSong = await Song.findOne({ songname });
     if (existingSong) {
       return res.status(409).json({
@@ -12,7 +12,7 @@ router.post("/addsong", async (req, res) => {
         message: "Song already exists with this name",
       });
     }
-    const newSong = new Song({ songname, artistname, image });
+    const newSong = new Song({ songname, artistname, imageURL, songURL });
     await newSong.save();
     res.status(200).json({
       success: true,

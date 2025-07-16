@@ -12,12 +12,12 @@ const SongSchema = new Schema({
     required: true,
     trimr: true,
   },
-  image: {
+  imageURL: {
     type: String,
     required: true,
     trimr: true,
   },
-  song: {
+  songURL: {
     type: String,
     required: true,
     trimr: true,

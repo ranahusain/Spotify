@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../../supabaseClient";
 import styles from "./ImageUpload.module.css";
-const ImageUpload = () => {
+const ImageUpload = ({ OnUpload }) => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [fileURL, setFileURL] = useState("");
@@ -38,8 +38,8 @@ const ImageUpload = () => {
         .from("songs")
         .getPublicUrl(filePath);
 
-      console.log(data.publicUrl);
       setFileURL(url.publicUrl);
+      OnUpload(url.publicUrl);
       alert("File Uploaded Successfully");
     } catch (error) {
       console.log(error);
