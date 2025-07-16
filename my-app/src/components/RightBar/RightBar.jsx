@@ -1,11 +1,67 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./RightBar.module.css";
+import axios from "axios";
+import { FaPlay, FaPause } from "react-icons/fa";
 
 const RightBar = () => {
+  const [songs, setSong] = useState([]);
+  const [playingId, setPlayingId] = useState(null); // Track which song is playing
+  const [audio, setAudio] = useState(null);
+
+  useEffect(() => {
+    const fetchsongs = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/getsong/");
+        setSong(res.data);
+      } catch (error) {
+        console.log("error in fetching songs");
+      }
+    };
+    fetchsongs();
+  }, []);
+
+  const togglePlay = (song) => {
+    if (playingId === song._id) {
+      audio.pause();
+      setPlayingId(null);
+    } else {
+      if (audio) audio.pause(); // stop previous audio
+      const newAudio = new Audio(song.songURL);
+      newAudio.play();
+      setAudio(newAudio);
+      setPlayingId(song._id);
+    }
+  };
+
   return (
-    <>
-      <div className={styles.right_side}></div>
-    </>
+    <div className={styles.right_side}>
+      <div className={styles.section_header}>
+        <h2>Trending songs</h2>
+        <a href="#">Show all</a>
+      </div>
+
+      <div className={styles.song_grid}>
+        {songs.map((song) => (
+          <div className={styles.song_card} key={song._id}>
+            <div className={styles.image_wrapper}>
+              <img src={song.imageURL} alt={song.songname} />
+              <div
+                className={styles.play_icon}
+                onClick={() => togglePlay(song)}
+              >
+                {playingId === song._id ? (
+                  <FaPause className={styles.audio_icon} />
+                ) : (
+                  <FaPlay className={styles.audio_icon} />
+                )}
+              </div>
+            </div>
+            <h3>{song.songname}</h3>
+            <p>{song.artistname}</p>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 

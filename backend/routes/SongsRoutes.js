@@ -26,4 +26,16 @@ router.post("/addsong", async (req, res) => {
   }
 });
 
+router.get("/getsong", async (req, res) => {
+  try {
+    const songs = await Song.find();
+    res.status(200).json(songs);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+});
+
 module.exports = router;

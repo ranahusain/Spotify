@@ -2,7 +2,7 @@ import styles from "./AddSong.module.css";
 import ImageUpload from "../../components/ImageUpload/ImageUpload";
 import SongUpload from "../../components/SongUpload/SongUpload";
 import { BsSpotify } from "react-icons/bs";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 const AddSong = () => {
@@ -29,6 +29,7 @@ const AddSong = () => {
       console.log(error);
     }
   };
+
   return (
     <>
       <div className={styles.main_container}>
