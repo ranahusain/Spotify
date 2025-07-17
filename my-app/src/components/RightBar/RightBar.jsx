@@ -6,7 +6,7 @@ import FooterUp from "../FooterUp/FooterUp";
 import { Link } from "react-router-dom";
 const RightBar = () => {
   const [songs, setSong] = useState([]);
-  const [playingId, setPlayingId] = useState(null); // Track which song is playing
+  const [playingId, setPlayingId] = useState(null);
   const [audio, setAudio] = useState(null);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ const RightBar = () => {
       {/* //popular artist */}
       <div className={styles.section_header}>
         <h2>Popular artists</h2>
-        <a href="#">Show all</a>
+        <Link to="PopularArtist">Show all</Link>
       </div>
       <div className={styles.song_grid}>
         {songs.map((song) => (
@@ -80,7 +80,7 @@ const RightBar = () => {
 
       <div className={styles.section_header}>
         <h2>Popular albums and singles</h2>
-        <a href="#">Show all</a>
+        <Link href="/PopularAlbum">Show all</Link>
       </div>
       <div className={styles.song_grid}>
         {songs.map((song) => (
