@@ -80,7 +80,7 @@ const RightBar = () => {
 
       <div className={styles.section_header}>
         <h2>Popular albums and singles</h2>
-        <Link href="/PopularAlbum">Show all</Link>
+        <Link to="/PopularAlbum">Show all</Link>
       </div>
       <div className={styles.song_grid}>
         {songs.map((song) => (
