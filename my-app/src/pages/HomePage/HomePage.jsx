@@ -4,6 +4,7 @@ import MainContainer from "../../components/MainContainer/MainContainer";
 import Footer from "../../components/Footer/Footer";
 import { useState } from "react";
 import { useEffect } from "react";
+import MusicPlayer from "../../components/MusicPlayer/MusicPlayer";
 const HomePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -24,7 +25,7 @@ const HomePage = () => {
     <>
       <NavBar />
       <MainContainer />
-      {isLoggedIn ? <> </> : <Footer />}
+      {isLoggedIn ? <MusicPlayer /> : <Footer />}
     </>
   );
 };

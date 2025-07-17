@@ -1,7 +1,6 @@
 import LeftBar from "../LeftBar/LeftBar";
 import RightBar from "../RightBar/RightBar";
 import styles from "./MainContainer.module.css";
-import Footer from "../Footer/Footer";
 const MainContainer = () => {
   return (
     <>
