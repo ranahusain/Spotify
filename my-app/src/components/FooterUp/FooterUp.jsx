@@ -1,5 +1,7 @@
 import styles from "./FooterUp.module.css";
-
+import { FaInstagram } from "react-icons/fa";
+import { FaTwitter } from "react-icons/fa";
+import { FaFacebook } from "react-icons/fa";
 const FooterUp = () => {
   return (
     <>
@@ -41,14 +43,10 @@ const FooterUp = () => {
           <p>Free Mobile App</p>
           <p>Popular by country</p>
         </div>
-        <div className={styles.img_cards}>
-          <img src="./images/home.png" alt="" className={styles.icon_footer} />
-          <img src="./images/logo.jpg" alt="" className={styles.icon_footer} />
-          <img
-            src="./images/search.png"
-            alt=""
-            className={styles.icon_footer}
-          />
+        <div className={styles.img_cards_icons}>
+          <FaInstagram className={styles.icon_footer} />
+          <FaTwitter className={styles.icon_footer} />
+          <FaFacebook className={styles.icon_footer} />
         </div>
       </div>
 

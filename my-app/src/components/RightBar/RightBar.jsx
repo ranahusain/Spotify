@@ -3,7 +3,7 @@ import styles from "./RightBar.module.css";
 import axios from "axios";
 import { FaPlay, FaPause } from "react-icons/fa";
 import FooterUp from "../FooterUp/FooterUp";
-
+import { Link } from "react-router-dom";
 const RightBar = () => {
   const [songs, setSong] = useState([]);
   const [playingId, setPlayingId] = useState(null); // Track which song is playing
@@ -38,7 +38,7 @@ const RightBar = () => {
     <div className={styles.right_side}>
       <div className={styles.section_header}>
         <h2>Trending songs</h2>
-        <a href="#">Show all</a>
+        <Link to="/TredingSongs">Show all</Link>
       </div>
       <div className={styles.song_grid}>
         {songs.map((song) => (
