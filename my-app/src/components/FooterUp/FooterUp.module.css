@@ -1,0 +1,42 @@
+.main_img_cards {
+  display: flex;
+  margin-top: 30px;
+  margin-left: 20px;
+}
+
+.img_cards {
+  height: 270px;
+  width: 250px;
+  margin: 10px;
+  line-height: 15px;
+}
+
+.img_cards img {
+  height: 200px;
+  width: 200px;
+  border-radius: 10px;
+}
+.img_cards h3 {
+  color: white;
+  font-size: 15px;
+}
+.img_cards p {
+  color: #b3b3b3;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.img_cards .icon_footer {
+  margin-left: 5px;
+  height: 30px;
+  width: 30px;
+}
+
+.img_cards .icon_footer:hover {
+  margin-left: 5px;
+  height: 30px;
+  width: 30px;
+  padding: 3px;
+  border-radius: 50%;
+  background-color: #575656;
+}

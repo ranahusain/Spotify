@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./RightBar.module.css";
 import axios from "axios";
 import { FaPlay, FaPause } from "react-icons/fa";
+import FooterUp from "../FooterUp/FooterUp";
 
 const RightBar = () => {
   const [songs, setSong] = useState([]);
@@ -92,6 +93,7 @@ const RightBar = () => {
           </div>
         ))}
       </div>
+      <FooterUp />
     </div>
   );
 };

@@ -1,7 +1,13 @@
 .right_side {
   width: 77%;
   height: 820px;
-  background-color: #171717;
+  background: #000000;
+  background: linear-gradient(
+    0deg,
+    rgb(13, 13, 13) 0%,
+    rgba(31, 31, 31, 1) 84%,
+    rgb(30, 30, 30) 100%
+  );
   border-radius: 10px;
   font-family: sans-serif;
   color: white;
@@ -68,6 +74,9 @@
 }
 
 .play_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
   bottom: 0%;
   right: 0%;
