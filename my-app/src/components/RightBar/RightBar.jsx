@@ -9,7 +9,9 @@ import { useContext } from "react";
 import { SongContext } from "../../context/SongContext";
 
 const RightBar = () => {
-  const { songDetails, setSongDetails } = useContext(SongContext);
+  // const { songDetails, setSongDetails } = useContext(SongContext);
+  const { songDetails, setSongDetails, isPlaying, setIsPlaying } =
+    useContext(SongContext);
 
   const [songs, setSong] = useState([]);
   const [playingId, setPlayingId] = useState(null);
@@ -28,22 +30,18 @@ const RightBar = () => {
   }, []);
 
   const togglePlay = (song) => {
-    if (playingId === song._id) {
-      audio.pause();
-      setPlayingId(null);
+    // If user clicks the currently playing song
+    if (songDetails.songURL === song.songURL) {
+      setIsPlaying(!isPlaying); // toggle
     } else {
-      if (audio) audio.pause(); // stop previous audio
-      const newAudio = new Audio(song.songURL);
-      newAudio.play();
-      setAudio(newAudio);
-      setPlayingId(song._id);
+      setSongDetails({
+        songURL: song.songURL,
+        imageURL: song.imageURL,
+        artistName: song.artist.name,
+        songName: song.songname,
+      });
+      setIsPlaying(true); // always play new song
     }
-    setSongDetails({
-      songURL: song.songURL,
-      imageURL: song.imageURL,
-      artistName: song.artist.name,
-      songName: song.songname,
-    });
   };
 
   console.log("HELLO");
@@ -64,7 +62,7 @@ const RightBar = () => {
                 className={styles.play_icon}
                 onClick={() => togglePlay(song)}
               >
-                {playingId === song._id ? (
+                {songDetails.songURL === song.songURL && isPlaying ? (
                   <FaPause className={styles.audio_icon} />
                 ) : (
                   <FaPlay className={styles.audio_icon} />

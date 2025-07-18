@@ -12,8 +12,12 @@ export const SongProvider = ({ children }) => {
     songName: "",
   });
 
+  const [isPlaying, setIsPlaying] = useState(false);
+
   return (
-    <SongContext.Provider value={{ songDetails, setSongDetails }}>
+    <SongContext.Provider
+      value={{ songDetails, setSongDetails, isPlaying, setIsPlaying }}
+    >
       {children}
     </SongContext.Provider>
   );

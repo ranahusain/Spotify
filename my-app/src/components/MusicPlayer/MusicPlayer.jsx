@@ -17,11 +17,12 @@ import { useContext } from "react";
 import { SongContext } from "../../context/SongContext";
 
 function MusicPlayer() {
-  const { songDetails } = useContext(SongContext);
+  const { songDetails, isPlaying, setIsPlaying } = useContext(SongContext);
+  // const { songDetails } = useContext(SongContext);
 
   const audioRef = useRef(null);
   const progressRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  // const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -46,6 +47,8 @@ function MusicPlayer() {
 
   const togglePlay = () => {
     const audio = audioRef.current;
+    if (!audio) return;
+
     if (isPlaying) {
       audio.pause();
     } else {
@@ -53,6 +56,18 @@ function MusicPlayer() {
     }
     setIsPlaying(!isPlaying);
   };
+
+  //when any of play pause change
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (isPlaying) {
+      audio.play().catch((err) => console.log("Playback error:", err));
+    } else {
+      audio.pause();
+    }
+  }, [isPlaying, songDetails]);
 
   const handleSeek = (e) => {
     const bar = progressRef.current;
