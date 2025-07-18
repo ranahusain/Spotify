@@ -13,7 +13,12 @@ import { RiFullscreenLine } from "react-icons/ri";
 import { PiScreencast } from "react-icons/pi";
 import Logo from "../../assets/song-1.png";
 
+import { useContext } from "react";
+import { SongContext } from "../../context/SongContext";
+
 function MusicPlayer() {
+  const { songDetails } = useContext(SongContext);
+
   const audioRef = useRef(null);
   const progressRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -72,17 +77,14 @@ function MusicPlayer() {
 
   return (
     <div className={styles.main_container}>
-      <audio
-        ref={audioRef}
-        src="https://bkbfkacpgdxbbunehdgi.supabase.co/storage/v1/object/public/songs/0.5919547831912209.mp3"
-      />
+      <audio ref={audioRef} src={songDetails.songURL} />
 
       {/* song div */}
       <div className={styles.song_info}>
-        <img src={Logo} alt="song" />
+        <img src={songDetails.imageURL} alt="song" />
         <div>
-          <p className={styles.song_title}>Fortnight (feat. Post Malone)</p>
-          <p className={styles.song_artist}>Taylor Swift, Post Malone</p>
+          <p className={styles.song_title}>{songDetails.songName}</p>
+          <p className={styles.song_artist}>{songDetails.artistName}</p>
         </div>
       </div>
 

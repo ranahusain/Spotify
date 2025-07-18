@@ -4,7 +4,13 @@ import axios from "axios";
 import { FaPlay, FaPause } from "react-icons/fa";
 import FooterUp from "../FooterUp/FooterUp";
 import { Link } from "react-router-dom";
+
+import { useContext } from "react";
+import { SongContext } from "../../context/SongContext";
+
 const RightBar = () => {
+  const { songDetails, setSongDetails } = useContext(SongContext);
+
   const [songs, setSong] = useState([]);
   const [playingId, setPlayingId] = useState(null);
   const [audio, setAudio] = useState(null);
@@ -32,7 +38,16 @@ const RightBar = () => {
       setAudio(newAudio);
       setPlayingId(song._id);
     }
+    setSongDetails({
+      songURL: song.songURL,
+      imageURL: song.imageURL,
+      artistName: song.artist.name,
+      songName: song.songname,
+    });
   };
+
+  console.log("HELLO");
+  console.log(songDetails.songURL);
 
   return (
     <div className={styles.right_side}>
