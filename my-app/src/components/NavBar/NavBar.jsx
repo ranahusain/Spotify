@@ -29,6 +29,7 @@ const Navbar = () => {
     setIsLoggedIn(false);
     setUsername("");
     navigate("/");
+    window.location.reload();
   };
 
   return (

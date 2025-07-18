@@ -3,6 +3,25 @@
   font-weight: bold;
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track (background of scrollbar) */
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+/* Thumb (the draggable handle) */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 6px;
+}
+
+/* Thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 body {
   background-color: black;
 }
