@@ -3,6 +3,7 @@ const connectDB = require("./db");
 const cors = require("cors");
 const users = require("./routes/UserRoutes");
 const songs = require("./routes/SongsRoutes");
+const playlists = require("./routes/PlaylistRoutes");
 
 const app = express();
 app.use(express.json());
@@ -15,6 +16,7 @@ app.get("/", (req, res) => {
 
 app.use("/api", users);
 app.use("/api", songs);
+app.use("/api", playlists);
 
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
