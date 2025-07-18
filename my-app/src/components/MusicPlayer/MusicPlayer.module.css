@@ -88,6 +88,12 @@
   transition: width 0.2s ease;
 }
 
+.progressFill:hover {
+  height: 100%;
+  background-color: #30db6c;
+  transition: width 0.2s ease;
+}
+
 .side_controls {
   display: flex;
   gap: 15px;

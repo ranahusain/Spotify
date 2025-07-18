@@ -80,16 +80,22 @@
   position: absolute;
   bottom: 0%;
   right: 0%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(30, 215, 96, 0.9);
+  transform: translate(-20%, -20%);
+  background-color: #26d263;
   color: rgb(0, 0, 0);
   height: 20px;
   width: 20px;
-  padding: 10px;
+  padding: 13px;
   border-radius: 50%;
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.3s ease;
+}
+
+.play_icon:hover {
+  background-color: #2de46d;
+  padding: 14px;
+  transition: 0.1s ease;
 }
 
 .image_wrapper:hover .play_icon {
@@ -117,4 +123,11 @@
   height: 170px;
   width: 170px;
   border-radius: 50%;
+}
+
+.audio_icon_link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
 }

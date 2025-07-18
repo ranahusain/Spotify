@@ -14,8 +14,6 @@ const RightBar = () => {
     useContext(SongContext);
 
   const [songs, setSong] = useState([]);
-  const [playingId, setPlayingId] = useState(null);
-  const [audio, setAudio] = useState(null);
 
   useEffect(() => {
     const fetchsongs = async () => {
@@ -30,7 +28,6 @@ const RightBar = () => {
   }, []);
 
   const togglePlay = (song) => {
-    // If user clicks the currently playing song
     if (songDetails.songURL === song.songURL) {
       setIsPlaying(!isPlaying); // toggle
     } else {
@@ -40,12 +37,24 @@ const RightBar = () => {
         artistName: song.artist.name,
         songName: song.songname,
       });
-      setIsPlaying(true); // always play new song
+      setIsPlaying(true);
     }
   };
 
-  console.log("HELLO");
-  console.log(songDetails.songURL);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+      console.log("log in true set hogya");
+      console.log(isLoggedIn);
+    } else {
+      setIsLoggedIn(false);
+      console.log("log in false set hogya");
+      console.log(isLoggedIn);
+    }
+  }, []);
 
   return (
     <div className={styles.right_side}>
@@ -62,10 +71,20 @@ const RightBar = () => {
                 className={styles.play_icon}
                 onClick={() => togglePlay(song)}
               >
-                {songDetails.songURL === song.songURL && isPlaying ? (
-                  <FaPause className={styles.audio_icon} />
+                {isLoggedIn ? (
+                  <>
+                    {songDetails.songURL === song.songURL && isPlaying ? (
+                      <FaPause className={styles.audio_icon} />
+                    ) : (
+                      <FaPlay className={styles.audio_icon} />
+                    )}
+                  </>
                 ) : (
-                  <FaPlay className={styles.audio_icon} />
+                  <>
+                    <Link to="/LogIn" className={styles.audio_icon_link}>
+                      <FaPlay className={styles.audio_icon} />
+                    </Link>
+                  </>
                 )}
               </div>
             </div>
