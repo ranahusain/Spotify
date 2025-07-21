@@ -36,8 +36,14 @@ const Navbar = () => {
     <div>
       <nav className={styles.navbar}>
         <div className={styles.nav_left}>
-          <FaSpotify className={styles.nav_img} />
-          <GoHomeFill className={styles.nav_img_1} />
+          <Link to="/">
+            <FaSpotify className={styles.nav_img} />
+          </Link>
+
+          <Link to="/">
+            <GoHomeFill className={styles.nav_img_1} />
+          </Link>
+
           <div className={styles.search_bar}>
             <IoSearch className={styles.icon} />
             <input type="text" placeholder="What do you want to play?" />
@@ -47,9 +53,15 @@ const Navbar = () => {
         </div>
 
         <ul className={styles.nav_right}>
-          <li>
-            <Link to="/Playlist/">Playlist</Link>
-          </li>
+          {isLoggedIn ? (
+            <li>
+              <Link to="/Playlist/">Playlist</Link>
+            </li>
+          ) : (
+            <li>
+              <Link to="#">Premium</Link>
+            </li>
+          )}
           <li>
             <Link to="#">Support</Link>
           </li>

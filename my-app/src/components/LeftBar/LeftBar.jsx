@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styles from "./LeftBar.module.css";
 import { FiPlus } from "react-icons/fi";
 import { CiGlobe } from "react-icons/ci";
@@ -46,25 +46,29 @@ const LeftBar = () => {
           <div className={styles.create_popup}>
             <h4>Create a New Playlist</h4>
             <form onSubmit={submitForm}>
-              <input
-                type="text"
-                placeholder="Enter playlist name"
-                className={styles.input}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              <button className={styles.nav_btn}>Create</button>
+              <div>
+                <input
+                  type="text"
+                  placeholder="Enter playlist name"
+                  className={styles.input}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                <button className={styles.nav_btn}>Create Playlist</button>
+              </div>
             </form>
           </div>
         )}
 
-        <div className={styles.card}>
-          <h3>Create Your first Playlist</h3>
-          <p>It's easy, we'll help you</p>
-          <button className={styles.nav_btn} onClick={handlePlusClick}>
-            Create Playlist
-          </button>
-        </div>
+        {!showCreatePopup && (
+          <div className={styles.card}>
+            <h3>Create Your first Playlist</h3>
+            <p>It's easy, we'll help you</p>
+            <button className={styles.nav_btn} onClick={handlePlusClick}>
+              Create Playlist
+            </button>
+          </div>
+        )}
 
         <div className={styles.card}>
           <h3>Let's find some podcasts to follow</h3>

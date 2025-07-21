@@ -77,6 +77,7 @@ const TrendingSongs = () => {
   }, []);
 
   //-------------------------------------//
+
   useEffect(() => {
     const fetchsongs = async () => {
       try {

@@ -96,7 +96,13 @@ function MusicPlayer() {
 
       {/* song div */}
       <div className={styles.song_info}>
-        <img src={songDetails.imageURL} alt="song" />
+        <img
+          src={
+            songDetails && songDetails.imageURL
+              ? songDetails.imageURL
+              : "https://bkbfkacpgdxbbunehdgi.supabase.co/storage/v1/object/public/songs/0.9786012616069567.png"
+          }
+        />
         <div>
           <p className={styles.song_title}>{songDetails.songName}</p>
           <p className={styles.song_artist}>{songDetails.artistName}</p>
