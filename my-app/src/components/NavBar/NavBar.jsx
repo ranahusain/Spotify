@@ -68,7 +68,7 @@ const Navbar = () => {
           {isLoggedIn ? (
             <>
               <li>
-                <h3>Welcome, {username}</h3>
+                <h3 style={{ marginBottom: "20px" }}>Welcome, {username}</h3>
               </li>
               <li>
                 <Link to="/">

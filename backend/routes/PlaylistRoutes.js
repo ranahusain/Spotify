@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Playlist = require("../models/PlaylistModel");
+const auth = require("../middleware/auth");
 
 router.post("/playlists", async (req, res) => {
   try {
@@ -59,10 +60,11 @@ router.post("/playlists/add", async (req, res) => {
   }
 });
 
-router.get("/getplaylists", async (req, res) => {
+router.get("/getplaylists", auth, async (req, res) => {
+  const userId = req.user.id; // from JWT token
   try {
     const playlist = await Playlist.find({
-      owner: "687e304ca3b98302c98289cf",
+      owner: userId,
     }).populate("owner songs");
 
     res.status(200).json(playlist);

@@ -24,7 +24,12 @@ const TrendingSongs = () => {
 
   const handleAddToPlaylistClick = async (song) => {
     try {
-      const res = await axios.get("http://localhost:5000/api/getplaylists"); // Change this
+      const token = localStorage.getItem("token");
+      const res = await axios.get("http://localhost:5000/api/getplaylists", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }); // Change this
       setPlaylists(res.data);
       setSelectedSong(song);
       setShowPlaylistPopup(true);

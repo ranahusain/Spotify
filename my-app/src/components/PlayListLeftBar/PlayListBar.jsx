@@ -10,7 +10,13 @@ const PlaylistSidebar = () => {
   useEffect(() => {
     const fetchPlaylists = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/getplaylists"); // adjust endpoint
+        const token = localStorage.getItem("token");
+
+        const res = await axios.get("http://localhost:5000/api/getplaylists", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }); // adjust endpoint
         setPlaylists(res.data);
       } catch (err) {
         console.error("Failed to fetch playlists:", err);
