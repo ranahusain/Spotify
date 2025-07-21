@@ -119,3 +119,14 @@
   font-weight: 500;
   overflow: hidden;
 }
+
+.details {
+  display: flex;
+  align-items: end;
+  justify-content: flex-end;
+}
+
+.threedot {
+  margin-top: -50px;
+  cursor: pointer;
+}

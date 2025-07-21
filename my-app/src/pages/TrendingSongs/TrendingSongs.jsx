@@ -6,6 +6,7 @@ import FooterUp from "../../components/FooterUp/FooterUp";
 import Navbar from "../../components/Navbar/Navbar";
 import LeftBar from "../../components/LeftBar/LeftBar";
 import Footer from "../../components/Footer/Footer";
+import { BsThreeDotsVertical } from "react-icons/bs";
 
 const TrendingSongs = () => {
   const [songs, setSong] = useState([]);
@@ -63,6 +64,13 @@ const TrendingSongs = () => {
                   </div>
                 </div>
                 <h3>{song.songname}</h3>
+
+                <div className={styles.details}>
+                  <span className={styles.threedot}>
+                    <BsThreeDotsVertical />
+                  </span>
+                </div>
+
                 <p>{song.artist.name}</p>
               </div>
             ))}
