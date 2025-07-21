@@ -130,3 +130,43 @@
   margin-top: -50px;
   cursor: pointer;
 }
+
+.popupMenu {
+  background: #1f1f1f;
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+}
+
+.playlistPopup {
+  position: fixed;
+  top: 30%;
+  left: 35%;
+  background: #161616;
+  padding: 20px;
+  border-radius: 8px;
+  color: white;
+  z-index: 100;
+  width: 300px;
+}
+.playlistPopup ul {
+  list-style: none;
+  padding: 0;
+}
+.playlistPopup li {
+  padding: 8px;
+  cursor: pointer;
+}
+.playlistPopup li:hover {
+  background: #1db954;
+}
+
+.btn {
+  padding: 0.5625rem 2rem;
+  font-size: 12px;
+  background-color: white;
+  color: black;
+  border-radius: 1.5625rem;
+  border: none;
+  cursor: pointer;
+}

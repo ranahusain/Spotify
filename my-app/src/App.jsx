@@ -14,6 +14,8 @@ import AddSong from "./pages/AddSong/AddSong";
 import TrendingSongs from "./pages/TrendingSongs/TrendingSongs";
 import PopularArtist from "./pages/PopularArtist/PopularArstist";
 import PopularAlbum from "./pages/PopularAlbum/PopularAlbum";
+import Playlist from "./pages/PlayList/PlayList";
+import MainPlayListPage from "./pages/MainPlayListPage/MainPlayListPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +27,8 @@ const router = createBrowserRouter(
       <Route path="/TredingSongs" element={<TrendingSongs />} />
       <Route path="/PopularArtist" element={<PopularArtist />} />
       <Route path="/PopularAlbum" element={<PopularAlbum />} />
+      <Route path="/Playlist/:id" element={<Playlist />} />
+      <Route path="/Playlist/" element={<MainPlayListPage />} />
     </>
   )
 );

@@ -48,7 +48,7 @@ const Navbar = () => {
 
         <ul className={styles.nav_right}>
           <li>
-            <Link to="#">Premium</Link>
+            <Link to="/Playlist/">Playlist</Link>
           </li>
           <li>
             <Link to="#">Support</Link>
