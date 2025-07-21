@@ -51,7 +51,7 @@ const AddSong = () => {
           </span>
         </h1>
 
-        <form className={styles.form} onSubmit={submitForm}>
+        <form className={styles.form}>
           <label>Song Name</label>
           <input
             type="text"

@@ -1,21 +1,69 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./LeftBar.module.css";
 import { FiPlus } from "react-icons/fi";
 import { CiGlobe } from "react-icons/ci";
+import axios from "axios";
 
 const LeftBar = () => {
+  const [showCreatePopup, setShowCreatePopup] = useState(false);
+  const [name, setName] = useState("");
+  const [owner, setOwner] = useState("");
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user._id) {
+      setOwner(user._id);
+    }
+  }, []);
+
+  const handlePlusClick = () => {
+    setShowCreatePopup(!showCreatePopup);
+  };
+
+  const submitForm = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:5000/api/playlists", {
+        name,
+        owner,
+      });
+      console.log(res.data);
+      setName("");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div className={styles.left_side}>
         <div className={styles.left_heading}>
           <h3>Your Library</h3>
-          <FiPlus className={styles.library_icon} />
+          <FiPlus className={styles.library_icon} onClick={handlePlusClick} />
         </div>
+
+        {showCreatePopup && (
+          <div className={styles.create_popup}>
+            <h4>Create a New Playlist</h4>
+            <form onSubmit={submitForm}>
+              <input
+                type="text"
+                placeholder="Enter playlist name"
+                className={styles.input}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <button className={styles.nav_btn}>Create</button>
+            </form>
+          </div>
+        )}
 
         <div className={styles.card}>
           <h3>Create Your first Playlist</h3>
           <p>It's easy, we'll help you</p>
-          <button className={styles.nav_btn}>Create Playlist</button>
+          <button className={styles.nav_btn} onClick={handlePlusClick}>
+            Create Playlist
+          </button>
         </div>
 
         <div className={styles.card}>

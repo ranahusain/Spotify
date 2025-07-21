@@ -33,9 +33,9 @@ const LogIn = () => {
       console.log(res.data);
       if (res.data.success) {
         console.log("login Success");
-        const loggedInUser = res.data.user.name;
+        const loggedInUser = res.data.user;
         console.log(loggedInUser);
-        localStorage.setItem("user", loggedInUser);
+        localStorage.setItem("user", JSON.stringify(loggedInUser));
         localStorage.setItem("token", res.data.token);
         return navigate("/");
       } else {
