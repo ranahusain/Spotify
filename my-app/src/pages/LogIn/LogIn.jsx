@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { supabase } from "../../supabaseClient";
 
 const LogIn = () => {
   const [step, setStep] = useState(1);
@@ -43,6 +44,15 @@ const LogIn = () => {
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+    });
+    if (error) {
+      alert("Google sign-in error: " + error.message);
     }
   };
   return (
@@ -95,7 +105,7 @@ const LogIn = () => {
               </div>
 
               <div className={styles.social_buttons}>
-                <button className={styles.google_btn}>
+                <button className={styles.google_btn} onClick={handleGoogleSignIn}>
                   <img src="https://img.icons8.com/color/16/000000/google-logo.png" />
                   Continue with Google
                 </button>
