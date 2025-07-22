@@ -98,4 +98,36 @@ router.get("/verify", auth, async (req, res) => {
   }
 });
 
+// routes/auth.js or similar
+// routes/auth.js or similar
+router.post("/google-login", async (req, res) => {
+  const { name, email, role } = req.body;
+
+  try {
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = new User({
+        name,
+        email,
+        role,
+        password: "google-oauth", // dummy password
+      });
+      await user.save();
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWTSECRET, {
+      expiresIn: "2h",
+    });
+
+    user.token = token;
+    user.password = undefined;
+
+    res.status(200).json({ success: true, user, token });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
 module.exports = router;

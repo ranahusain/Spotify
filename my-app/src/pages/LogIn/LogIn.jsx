@@ -9,6 +9,10 @@ import { supabase } from "../../supabaseClient";
 
 const LogIn = () => {
   const [step, setStep] = useState(1);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
   const handleNext = (e) => {
     e.preventDefault();
     if (step < 2) {
@@ -18,69 +22,6 @@ const LogIn = () => {
     }
   };
 
-  //LOGIN
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-
-  // Add this useEffect for Google OAuth callback handling
-  useEffect(() => {
-    const checkGoogleLogin = async () => {
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
-      const {
-        data: { session },
-        error: sessionError,
-      } = await supabase.auth.getSession();
-      if (user && session) {
-        // Construct a user object similar to backend
-        const loggedInUser = {
-          _id: user.id, // Supabase user id
-          name:
-            user.user_metadata.name ||
-            user.email?.split("@")[0] ||
-            "Google User",
-          email: user.email,
-          role: "user", // Default role
-          createdAt: user.created_at,
-        };
-        localStorage.setItem("user", JSON.stringify(loggedInUser));
-        localStorage.setItem("token", session.access_token);
-        navigate("/");
-      }
-    };
-    checkGoogleLogin();
-
-    // Listen for Supabase auth state changes
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (event === "SIGNED_IN" && session) {
-          const user = session.user;
-          const loggedInUser = {
-            _id: user.id,
-            name:
-              user.user_metadata?.name ||
-              user.email?.split("@")[0] ||
-              "Google User",
-            email: user.email,
-            role: "user",
-            createdAt: user.created_at,
-          };
-          localStorage.setItem("user", JSON.stringify(loggedInUser));
-          localStorage.setItem("token", session.access_token);
-          navigate("/");
-        }
-      }
-    );
-    return () => {
-      listener?.subscription.unsubscribe();
-    };
-    // eslint-disable-next-line
-  }, []);
-
   const submitForm = async (e) => {
     e.preventDefault();
     try {
@@ -88,19 +29,17 @@ const LogIn = () => {
         email,
         password,
       });
-      console.log(res.data);
+
       if (res.data.success) {
-        console.log("login Success");
         const loggedInUser = res.data.user;
-        console.log(loggedInUser);
         localStorage.setItem("user", JSON.stringify(loggedInUser));
         localStorage.setItem("token", res.data.token);
-        return navigate("/");
+        navigate("/");
       } else {
-        console.log("LogIn Failed");
+        console.log("Login failed");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -112,6 +51,61 @@ const LogIn = () => {
       alert("Google sign-in error: " + error.message);
     }
   };
+
+  const syncGoogleUser = async (user, session) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/google-login",
+        {
+          name:
+            user.user_metadata?.name ||
+            user.email?.split("@")[0] ||
+            "Google User",
+          email: user.email,
+          role: "user",
+        }
+      );
+
+      if (response.data.success) {
+        const { user: backendUser, token } = response.data;
+        localStorage.setItem("user", JSON.stringify(backendUser));
+        localStorage.setItem("token", token);
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Google login failed:", error);
+    }
+  };
+
+  useEffect(() => {
+    const checkGoogleLogin = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (user && session) {
+        syncGoogleUser(user, session);
+      }
+    };
+
+    checkGoogleLogin();
+
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (event === "SIGNED_IN" && session) {
+          syncGoogleUser(session.user, session);
+        }
+      }
+    );
+
+    return () => {
+      listener?.subscription?.unsubscribe();
+    };
+  }, []);
 
   return (
     <div className="maha_container">
@@ -155,27 +149,28 @@ const LogIn = () => {
               </button>
             </form>
 
-            <>
-              <div className={styles.divider}>
-                <hr />
-                <span>or</span>
-                <hr />
-              </div>
+            <div className={styles.divider}>
+              <hr />
+              <span>or</span>
+              <hr />
+            </div>
 
-              <div className={styles.social_buttons}>
-                <button
-                  className={styles.google_btn}
-                  onClick={handleGoogleSignIn}
-                >
-                  <img src="https://img.icons8.com/color/16/000000/google-logo.png" />
-                  Continue with Google
-                </button>
-                <button>
-                  <FaGithub className={styles.git_btn} />
-                  Continue with Github
-                </button>
-              </div>
-            </>
+            <div className={styles.social_buttons}>
+              <button
+                className={styles.google_btn}
+                onClick={handleGoogleSignIn}
+              >
+                <img
+                  src="https://img.icons8.com/color/16/000000/google-logo.png"
+                  alt="Google logo"
+                />
+                Continue with Google
+              </button>
+              <button>
+                <FaGithub className={styles.git_btn} />
+                Continue with GitHub
+              </button>
+            </div>
 
             <p className={styles.login_link}>
               Don't have an Account? <Link to="/SignUp">SignUp here</Link>

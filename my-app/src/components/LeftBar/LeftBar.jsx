@@ -12,7 +12,7 @@ const LeftBar = () => {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user && user._id) {
-      setOwner(user._id);
+      setOwner(user._id || user.id || "");
     }
   }, []);
 
