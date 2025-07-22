@@ -65,4 +65,22 @@ router.get("/getsong", async (req, res) => {
   }
 });
 
+//get the artist details
+router.get("/artist/:artistname", async (req, res) => {
+  try {
+    const artistname = decodeURIComponent(req.params.artistname);
+    const songs = await Song.find({ "artist.name": artistname });
+
+    if (!songs.length) {
+      return res.status(404).json({ message: "Artist not found" });
+    }
+
+    const artist = songs[0].artist;
+    res.json({ artist, songs });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 module.exports = router;

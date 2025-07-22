@@ -8,8 +8,11 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { SongContext } from "../../context/SongContext";
 
+import { useNavigate } from "react-router-dom";
+
 const RightBar = () => {
-  // const { songDetails, setSongDetails } = useContext(SongContext);
+  const navigate = useNavigate();
+
   const { songDetails, setSongDetails, isPlaying, setIsPlaying } =
     useContext(SongContext);
 
@@ -100,7 +103,11 @@ const RightBar = () => {
       </div>
       <div className={styles.song_grid}>
         {songs.map((song) => (
-          <div className={styles.song_card} key={song._id}>
+          <div
+            className={styles.song_card}
+            key={song._id}
+            onClick={() => navigate(`/Artist/${song.artist.name}`)}
+          >
             <div className={styles.image_wrapper_1}>
               <img src={song.artist.imageURL} alt={song.songname} />
             </div>

@@ -9,8 +9,6 @@ import Footer from "../../components/Footer/Footer";
 
 const PopularArtist = () => {
   const [songs, setSong] = useState([]);
-  const [playingId, setPlayingId] = useState(null);
-  const [audio, setAudio] = useState(null);
 
   useEffect(() => {
     const fetchsongs = async () => {
