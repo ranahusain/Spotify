@@ -6,6 +6,7 @@ import { IoSearch } from "react-icons/io5";
 import { MdOutlineDownloading } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { supabase } from "../../supabaseClient";
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,7 +24,8 @@ const Navbar = () => {
     }
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setIsLoggedIn(false);

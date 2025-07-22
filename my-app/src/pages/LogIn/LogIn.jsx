@@ -2,7 +2,7 @@ import styles from "./LogIn.module.css";
 import { BsSpotify } from "react-icons/bs";
 import { FaGithub } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { supabase } from "../../supabaseClient";
@@ -23,6 +23,63 @@ const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  // Add this useEffect for Google OAuth callback handling
+  useEffect(() => {
+    const checkGoogleLogin = async () => {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+      if (user && session) {
+        // Construct a user object similar to backend
+        const loggedInUser = {
+          _id: user.id, // Supabase user id
+          name:
+            user.user_metadata.name ||
+            user.email?.split("@")[0] ||
+            "Google User",
+          email: user.email,
+          role: "user", // Default role
+          createdAt: user.created_at,
+        };
+        localStorage.setItem("user", JSON.stringify(loggedInUser));
+        localStorage.setItem("token", session.access_token);
+        navigate("/");
+      }
+    };
+    checkGoogleLogin();
+
+    // Listen for Supabase auth state changes
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (event === "SIGNED_IN" && session) {
+          const user = session.user;
+          const loggedInUser = {
+            _id: user.id,
+            name:
+              user.user_metadata?.name ||
+              user.email?.split("@")[0] ||
+              "Google User",
+            email: user.email,
+            role: "user",
+            createdAt: user.created_at,
+          };
+          localStorage.setItem("user", JSON.stringify(loggedInUser));
+          localStorage.setItem("token", session.access_token);
+          navigate("/");
+        }
+      }
+    );
+    return () => {
+      listener?.subscription.unsubscribe();
+    };
+    // eslint-disable-next-line
+  }, []);
 
   const submitForm = async (e) => {
     e.preventDefault();
@@ -55,6 +112,7 @@ const LogIn = () => {
       alert("Google sign-in error: " + error.message);
     }
   };
+
   return (
     <div className="maha_container">
       <div className={styles.main_container}>
@@ -105,7 +163,10 @@ const LogIn = () => {
               </div>
 
               <div className={styles.social_buttons}>
-                <button className={styles.google_btn} onClick={handleGoogleSignIn}>
+                <button
+                  className={styles.google_btn}
+                  onClick={handleGoogleSignIn}
+                >
                   <img src="https://img.icons8.com/color/16/000000/google-logo.png" />
                   Continue with Google
                 </button>
