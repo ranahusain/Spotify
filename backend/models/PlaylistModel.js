@@ -12,7 +12,7 @@ const PlaylistSchema = new Schema({
     type: String,
     trim: true,
     default:
-      "https://bkbfkacpgdxbbunehdgi.supabase.co/storage/v1/object/public/songs/0.9786012616069567.png", // cover image for playlist
+      "https://bkbfkacpgdxbbunehdgi.supabase.co/storage/v1/object/public/songs/0.9786012616069567.png",
   },
   owner: {
     type: Schema.Types.ObjectId,

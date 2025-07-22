@@ -4,14 +4,15 @@ import SongUpload from "../../components/SongUpload/SongUpload";
 import { BsSpotify } from "react-icons/bs";
 import { useState } from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 const AddSong = () => {
   const [songname, setSongName] = useState("");
   const [artistName, setArtistName] = useState("");
   const [artistImageURL, setArtistImageURL] = useState("");
   const [albumName, setAlbumName] = useState("");
   const [albumImageURL, setAlbumImageURL] = useState("");
-  const [imageURL, setImageURL] = useState(""); // Song cover image
+  const [imageURL, setImageURL] = useState("");
   const [songURL, setSongURL] = useState("");
 
   const submitForm = async (e) => {
@@ -41,6 +42,16 @@ const AddSong = () => {
     }
   };
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user"));
+
+    if (!userData || userData.email !== "admin@gmail.com") {
+      navigate("/");
+    }
+  }, []);
+
   return (
     <div className={styles.main_container}>
       <div className={styles.container}>
@@ -51,7 +62,7 @@ const AddSong = () => {
           </span>
         </h1>
 
-        <form className={styles.form}>
+        <form className={styles.form} onSubmit={submitForm}>
           <label>Song Name</label>
           <input
             type="text"
