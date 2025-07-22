@@ -4,7 +4,9 @@ import Footer from "../../components/Footer/Footer";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./ArtistDetail.module.css";
+import { SlMusicToneAlt } from "react-icons/sl";
 import axios from "axios";
+
 const ArtistDetail = () => {
   const { artistname } = useParams();
   const [artistData, setArtistData] = useState({ artist: {}, songs: [] });
@@ -30,17 +32,64 @@ const ArtistDetail = () => {
         <LeftBar />
 
         <div className={styles.right_side}>
-          <div className={styles.artist_info}>
-            {/* <img src={songs.artist.imageURL} alt={artist.name} /> */}
-            {/* <h2>{songs.artist.name}</h2> */}
-            {/* <p>{artist.bio || "No bio available."}</p> */}
+          <div className={styles.playlist_container}>
+            <div className={styles.playlist_header}>
+              <div className={styles.playlist_cover}>
+                {artistData.artist.imageURL ? (
+                  <img
+                    src={artistData.artist.imageURL}
+                    alt={artistData.artist.name}
+                    className={styles.playlist_image}
+                  />
+                ) : (
+                  <SlMusicToneAlt className={styles.playlist_cover_icon} />
+                )}
+              </div>
+              <div>
+                <p className={styles.playlist_label}>Artist</p>
+                <h1 className={styles.playlist_title}>
+                  {artistData.artist.name}
+                </h1>
+                <p className={styles.playlist_info}>
+                  {artistData.songs.length} song
+                  {artistData.songs.length !== 1 ? "s" : ""}
+                </p>
+              </div>
+            </div>
+
+            <table className={styles.song_table}>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Title</th>
+                  <th>Album</th>
+                  <th>Date Added</th>
+                  <th>Duration</th>
+                </tr>
+              </thead>
+              <tbody>
+                {artistData.songs.map((song, index) => (
+                  <tr key={song._id}>
+                    <td>{index + 1}</td>
+                    <td>
+                      <div className={styles.song_title}>
+                        <img src={song.imageURL} alt={song.songname} />
+                        <div>
+                          <p className={styles.song_name}>{song.songname}</p>
+                          <p className={styles.artist_name}>
+                            {song.artist.name}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>{song.album.name}</td>
+                    <td>{new Date(song.createdAt).toLocaleDateString()}</td>
+                    <td>{song.duration || "N/A"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <h3>Songs</h3>
-          {/* <ul>
-            {songs.map((song) => (
-              <li key={song._id}>{song.songname}</li>
-            ))}
-          </ul> */}
         </div>
       </section>
       <Footer />
