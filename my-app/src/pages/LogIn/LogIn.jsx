@@ -46,6 +46,12 @@ const LogIn = () => {
   const handleGoogleSignIn = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/LogIn`,
+        queryParams: {
+          prompt: "select_account",
+        },
+      },
     });
     if (error) {
       alert("Google sign-in error: " + error.message);
@@ -78,34 +84,36 @@ const LogIn = () => {
   };
 
   useEffect(() => {
-    const checkGoogleLogin = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+    // avoid double-setting if already logged in
+    const isAlreadyLoggedIn =
+      localStorage.getItem("user") && localStorage.getItem("token");
+    if (isAlreadyLoggedIn) return;
 
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      if (user && session) {
-        syncGoogleUser(user, session);
-      }
-    };
-
-    checkGoogleLogin();
-
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+    // use onAuthStateChange as primary listener
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
         if (event === "SIGNED_IN" && session) {
-          syncGoogleUser(session.user, session);
+          await syncGoogleUser(session.user, session);
         }
       }
     );
 
-    return () => {
-      listener?.subscription?.unsubscribe();
+    // fallback if session already exists (e.g., after redirect)
+    const syncIfSessionExists = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session && session.user) {
+        await syncGoogleUser(session.user, session);
+      }
     };
-  }, []);
+
+    syncIfSessionExists();
+
+    return () => {
+      authListener?.subscription?.unsubscribe();
+    };
+  }, [navigate]);
 
   return (
     <div className="maha_container">
