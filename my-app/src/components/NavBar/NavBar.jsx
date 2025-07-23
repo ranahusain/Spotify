@@ -28,6 +28,8 @@ const Navbar = () => {
     await supabase.auth.signOut();
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("avatar");
+
     setIsLoggedIn(false);
     setUsername("");
     navigate("/");

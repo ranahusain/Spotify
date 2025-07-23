@@ -13,12 +13,16 @@ import { SongContext } from "../../context/SongContext";
 import { Link } from "react-router-dom";
 import { FaPlay, FaPause } from "react-icons/fa";
 import MusicPlayer from "../../components/MusicPlayer/MusicPlayer";
+import AvatarUpload from "../../components/AvatarUpload/AvatarUpload";
+import { LuPencil } from "react-icons/lu";
 
 const UserProfile = () => {
+  const [isHovering, setIsHovering] = useState(false);
   const [username, setUsername] = useState("");
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
 
+  const avatar = localStorage.getItem("avatar");
   useEffect(() => {
     const token = localStorage.getItem("token");
     const name = JSON.parse(localStorage.getItem("user"));
@@ -99,28 +103,59 @@ const UserProfile = () => {
         <div className={styles.right_side}>
           <div className={styles.playlist_container}>
             <div className={styles.playlist_header}>
-              <div className={styles.playlist_cover}>
-                {/* {username.imageURL ? (
+              <div
+                className={styles.playlist_cover}
+                onClick={() => setShowAvatarModal(true)}
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+              >
+                {avatar ? (
                   <img
-                    src="https://lh3.googleusercontent.com/a/ACg8ocKioZfVwaRCrcDJ4THkClM6ra-YEL8vFHcIeSKnW6q986D6535b=s96-c"
-                    alt={username}
+                    src={avatar}
+                    alt="User avatar"
                     className={styles.playlist_image}
                   />
                 ) : (
                   <CiUser className={styles.playlist_cover_icon} />
-                )} */}
-                <img
-                  src="https://lh3.googleusercontent.com/a/ACg8ocKioZfVwaRCrcDJ4THkClM6ra-YEL8vFHcIeSKnW6q986D6535b=s96-c"
-                  alt={username}
-                  className={styles.playlist_image}
-                />
+                )}
+
+                {isHovering && (
+                  <div className={styles.overlay}>
+                    <span
+                      className={`${styles.overlay_text} ${styles.playlist_cover_icon}`}
+                    >
+                      <LuPencil />
+                    </span>
+                  </div>
+                )}
               </div>
+
               <div>
                 <p className={styles.playlist_label}>Profile</p>
                 <h1 className={styles.playlist_title}>{username}</h1>
               </div>
             </div>
           </div>
+
+          {showAvatarModal && (
+            <div
+              className={styles.modal_overlay}
+              onClick={() => setShowAvatarModal(false)}
+            >
+              <div
+                className={styles.modal_content}
+                onClick={(e) => e.stopPropagation()} // Prevents modal from closing when clicking inside content
+              >
+                <button
+                  onClick={() => setShowAvatarModal(false)}
+                  className={styles.closeButton}
+                >
+                  &times;
+                </button>
+                <AvatarUpload />
+              </div>
+            </div>
+          )}
 
           {/* //popular artist */}
 
@@ -159,37 +194,7 @@ const UserProfile = () => {
             <h2>Top tracks this month</h2>
             <Link to="/TredingSongs">Show all</Link>
           </div>
-          {/* <div className={styles.song_grid}>
-            {songs.map((song) => (
-              <div className={styles.song_card} key={song._id}>
-                <div className={styles.image_wrapper}>
-                  <img src={song.imageURL} alt={song.songname} />
-                  <div
-                    className={styles.play_icon}
-                    onClick={() => togglePlay(song)}
-                  >
-                    {isLoggedIn ? (
-                      <>
-                        {songDetails.songURL === song.songURL && isPlaying ? (
-                          <FaPause className={styles.audio_icon} />
-                        ) : (
-                          <FaPlay className={styles.audio_icon} />
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        <Link to="/LogIn" className={styles.audio_icon_link}>
-                          <FaPlay className={styles.audio_icon} />
-                        </Link>
-                      </>
-                    )}
-                  </div>
-                </div>
-                <h3>{song.songname}</h3>
-                <p>{song.artist.name}</p>
-              </div>
-            ))}
-          </div> */}
+
           <div className={styles.track_list}>
             {songs.slice(0, 3).map((song, index) => (
               <div className={styles.track_row} key={song._id}>

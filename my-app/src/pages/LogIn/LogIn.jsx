@@ -71,7 +71,8 @@ const LogIn = () => {
           role: "user",
         }
       );
-
+      const avatarURL = user.user_metadata.avatar_url;
+      localStorage.setItem("avatar", avatarURL);
       if (response.data.success) {
         const { user: backendUser, token } = response.data;
         localStorage.setItem("user", JSON.stringify(backendUser));
