@@ -2,33 +2,24 @@ import styles from "./SignUp.module.css";
 import { BsSpotify } from "react-icons/bs";
 import { FaGithub } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { supabase } from "../../supabaseClient";
+
 const SignUp = () => {
   const [step, setStep] = useState(1);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
   const handleNext = (e) => {
     e.preventDefault();
     if (step < 3) {
       setStep(step + 1);
     } else {
       submitForm(e);
-    }
-  };
-
-  //signup
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-
-  const handleGoogleSignIn = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-    });
-    if (error) {
-      alert("Google sign-in error: " + error.message);
     }
   };
 
@@ -44,8 +35,6 @@ const SignUp = () => {
       if (res.data.success) {
         if (res.data.token) {
           const loggedInUser = res.data.user;
-          console.log(loggedInUser);
-          // localStorage.setItem("user", loggedInUser);
           localStorage.setItem("user", JSON.stringify(loggedInUser));
           localStorage.setItem("token", res.data.token);
           return navigate("/");
@@ -58,6 +47,75 @@ const SignUp = () => {
       console.log(error);
     }
   };
+
+  const handleGoogleSignIn = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/SignUp`,
+        queryParams: {
+          prompt: "select_account",
+        },
+      },
+    });
+    if (error) {
+      alert("Google sign-in error: " + error.message);
+    }
+  };
+
+  const syncGoogleUser = async (user, session) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/google-login",
+        {
+          name:
+            user.user_metadata?.name ||
+            user.email?.split("@")[0] ||
+            "Google User",
+          email: user.email,
+          role: "user",
+        }
+      );
+
+      if (response.data.success) {
+        const { user: backendUser, token } = response.data;
+        localStorage.setItem("user", JSON.stringify(backendUser));
+        localStorage.setItem("token", token);
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Google login failed:", error);
+    }
+  };
+
+  useEffect(() => {
+    const isAlreadyLoggedIn =
+      localStorage.getItem("user") && localStorage.getItem("token");
+    if (isAlreadyLoggedIn) return;
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === "SIGNED_IN" && session) {
+          await syncGoogleUser(session.user, session);
+        }
+      }
+    );
+
+    const syncIfSessionExists = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session && session.user) {
+        await syncGoogleUser(session.user, session);
+      }
+    };
+
+    syncIfSessionExists();
+
+    return () => {
+      authListener?.subscription?.unsubscribe();
+    };
+  }, [navigate]);
 
   return (
     <div className="maha_container">
@@ -117,24 +175,25 @@ const SignUp = () => {
             </button>
           </form>
 
-          <>
-            <div className={styles.divider}>
-              <hr />
-              <span>or</span>
-              <hr />
-            </div>
+          <div className={styles.divider}>
+            <hr />
+            <span>or</span>
+            <hr />
+          </div>
 
-            <div className={styles.social_buttons}>
-              <button className={styles.google_btn} onClick={handleGoogleSignIn}>
-                <img src="https://img.icons8.com/color/16/000000/google-logo.png" />
-                Sign up with Google
-              </button>
-              <button>
-                <FaGithub className={styles.git_btn} />
-                Sign up with Github
-              </button>
-            </div>
-          </>
+          <div className={styles.social_buttons}>
+            <button className={styles.google_btn} onClick={handleGoogleSignIn}>
+              <img
+                src="https://img.icons8.com/color/16/000000/google-logo.png"
+                alt="Google logo"
+              />
+              Sign up with Google
+            </button>
+            <button>
+              <FaGithub className={styles.git_btn} />
+              Sign up with Github
+            </button>
+          </div>
 
           <p className={styles.login_link}>
             Already have an account? <Link to="/LogIn">Log in here</Link>
