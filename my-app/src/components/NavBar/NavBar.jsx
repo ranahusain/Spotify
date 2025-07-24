@@ -57,22 +57,23 @@ const Navbar = () => {
         </div>
 
         <ul className={styles.nav_right}>
+          <li>
+            <Link to="/plans">Premium</Link>
+          </li>
+          <li>
+            <Link to="#">Support</Link>
+          </li>
+
           {isLoggedIn ? (
             <li>
               <Link to="/Playlist/">Playlist</Link>
             </li>
           ) : (
             <li>
-              <Link to="#">Premium</Link>
+              <Link to="#">Download</Link>
             </li>
           )}
-          <li>
-            <Link to="#">Support</Link>
-          </li>
 
-          <li>
-            <Link to="#">Download</Link>
-          </li>
           <li>
             <span className={styles.separator}>|</span>
           </li>
