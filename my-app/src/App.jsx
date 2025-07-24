@@ -18,7 +18,8 @@ import Playlist from "./pages/PlayList/PlayList";
 import MainPlayListPage from "./pages/MainPlayListPage/MainPlayListPage";
 import ArtistDetail from "./pages/ArtistDetail/ArtistDetail";
 import UserProfile from "./pages/UserProfile/UserProfile";
-
+import Payment from "./pages/Payment/Payment";
+import Plans from "./pages/Plans/Plans";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -33,6 +34,8 @@ const router = createBrowserRouter(
       <Route path="/Playlist/" element={<MainPlayListPage />} />
       <Route path="/artist/:artistname" element={<ArtistDetail />} />
       <Route path="/UserProfile" element={<UserProfile />} />
+      <Route path="/Payment" element={<Payment />} />
+      <Route path="/Plans" element={<Plans />} />
     </>
   )
 );
