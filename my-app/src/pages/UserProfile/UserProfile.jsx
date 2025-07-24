@@ -99,7 +99,6 @@ const UserProfile = () => {
       <Navbar />
       <section className={styles.main_section}>
         <LeftBar />
-
         <div className={styles.right_side}>
           <div className={styles.playlist_container}>
             <div className={styles.playlist_header}>

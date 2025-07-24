@@ -27,7 +27,11 @@ const UserSchema = new Schema({
     type: String,
     default: null,
   },
-
+  avatarURL: {
+    type: String,
+    default:
+      "https://bkbfkacpgdxbbunehdgi.supabase.co/storage/v1/object/public/songs/1753337121808.png",
+  },
   createdAt: {
     type: Date,
     default: Date.now,

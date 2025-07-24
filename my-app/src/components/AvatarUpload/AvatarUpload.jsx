@@ -3,8 +3,9 @@ import Cropper from "react-easy-crop";
 import { getCroppedImg } from "./cropUtils";
 import { supabase } from "../../supabaseClient";
 import styles from "./AvatarUpload.module.css";
+import axios from "axios";
 
-const AvatarUpload = ({ OnUpload }) => {
+const AvatarUpload = () => {
   const [file, setFile] = useState(null);
   const [imageSrc, setImageSrc] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -52,8 +53,15 @@ const AvatarUpload = ({ OnUpload }) => {
         .from("songs")
         .getPublicUrl(filePath);
 
-      localStorage.setItem("avatar", url.publicUrl);
-      OnUpload(url.publicUrl);
+      const avatarUrl = url.publicUrl; //public url of the the image!
+      localStorage.setItem("avatar", avatarUrl);
+
+      const user = JSON.parse(localStorage.getItem("user"));
+      const userId = user._id;
+      console.log("USER ID : ", userId);
+      await axios.put(`http://localhost:5000/api/update-avatar/${userId}`, {
+        avatarURL: avatarUrl,
+      });
       alert("File Uploaded Successfully");
     } catch (error) {
       console.error("Upload failed:", error);

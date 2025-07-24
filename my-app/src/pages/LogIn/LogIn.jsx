@@ -11,6 +11,7 @@ const LogIn = () => {
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
 
   const handleNext = (e) => {
@@ -73,12 +74,16 @@ const LogIn = () => {
       );
       const avatarURL = user.user_metadata.avatar_url;
       localStorage.setItem("avatar", avatarURL);
+
       if (response.data.success) {
         const { user: backendUser, token } = response.data;
         localStorage.setItem("user", JSON.stringify(backendUser));
         localStorage.setItem("token", token);
+        const name = JSON.parse(localStorage.getItem("user"));
+        localStorage.setItem("avatar", name.avatarURL);
         navigate("/");
       }
+      console.log(user.avatarURL);
     } catch (error) {
       console.error("Google login failed:", error);
     }
