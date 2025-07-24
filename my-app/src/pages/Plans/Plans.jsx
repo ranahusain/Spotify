@@ -3,6 +3,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import styles from "./Plans.module.css";
 import { FaInstagram, FaTwitter, FaFacebook } from "react-icons/fa";
 import Payment from "../../pages/Payment/Payment";
+import { useEffect } from "react";
 
 const Plans = () => {
   const [showPayment, setShowPayment] = useState(false);
@@ -14,6 +15,18 @@ const Plans = () => {
   const handleClosePayment = () => {
     setShowPayment(false);
   };
+
+  useEffect(() => {
+    if (showPayment) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [showPayment]);
 
   return (
     <>
