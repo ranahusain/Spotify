@@ -4,8 +4,10 @@ import { getCroppedImg } from "./cropUtils";
 import { supabase } from "../../supabaseClient";
 import styles from "./AvatarUpload.module.css";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const AvatarUpload = () => {
+const AvatarUpload = ({ onClose }) => {
   const [file, setFile] = useState(null);
   const [imageSrc, setImageSrc] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -53,18 +55,22 @@ const AvatarUpload = () => {
         .from("songs")
         .getPublicUrl(filePath);
 
-      const avatarUrl = url.publicUrl; //public url of the the image!
+      const avatarUrl = url.publicUrl;
       localStorage.setItem("avatar", avatarUrl);
 
       const user = JSON.parse(localStorage.getItem("user"));
       const userId = user._id;
-      console.log("USER ID : ", userId);
+
       await axios.put(`http://localhost:5000/api/update-avatar/${userId}`, {
         avatarURL: avatarUrl,
       });
-      alert("File Uploaded Successfully");
+
+      setTimeout(() => {
+        if (onClose) onClose();
+      }, 1500);
     } catch (error) {
       console.error("Upload failed:", error);
+      toast.error("Upload failed. Please try again.");
     } finally {
       setUploading(false);
     }
@@ -72,6 +78,7 @@ const AvatarUpload = () => {
 
   return (
     <div className={styles.uploadContainer}>
+      <ToastContainer position="top-center" autoClose={3000} />
       <label className={styles.uploadLabel}>Image Upload</label>
       <input
         type="file"

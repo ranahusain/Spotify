@@ -7,6 +7,7 @@ import { MdOutlineDownloading } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "../../supabaseClient";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -32,8 +33,11 @@ const Navbar = () => {
 
     setIsLoggedIn(false);
     setUsername("");
+    toast.success("Logged out successfully!");
     navigate("/");
-    window.location.reload();
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
   };
 
   return (
@@ -61,7 +65,7 @@ const Navbar = () => {
             <Link to="/plans">Premium</Link>
           </li>
           <li>
-            <Link to="#">Support</Link>
+            <Link to="/support">Support</Link>
           </li>
 
           {isLoggedIn ? (

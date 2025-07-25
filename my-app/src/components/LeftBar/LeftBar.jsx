@@ -3,6 +3,8 @@ import styles from "./LeftBar.module.css";
 import { FiPlus } from "react-icons/fi";
 import { CiGlobe } from "react-icons/ci";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const LeftBar = () => {
   const [showCreatePopup, setShowCreatePopup] = useState(false);
@@ -28,9 +30,12 @@ const LeftBar = () => {
         owner,
       });
       console.log(res.data);
+      toast.success("Playlist created successfully!");
       setName("");
+      setShowCreatePopup(false); // optionally close popup
     } catch (error) {
       console.log(error);
+      toast.error("Failed to create playlist.");
     }
   };
 

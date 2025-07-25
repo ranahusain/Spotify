@@ -151,7 +151,7 @@ const UserProfile = () => {
                 >
                   &times;
                 </button>
-                <AvatarUpload />
+                <AvatarUpload onClose={() => setShowAvatarModal(false)} />
               </div>
             </div>
           )}

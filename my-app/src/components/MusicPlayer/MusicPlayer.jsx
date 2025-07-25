@@ -8,21 +8,17 @@ import { HiOutlineQueueList } from "react-icons/hi2";
 import { TbMicrophone2 } from "react-icons/tb";
 import { IoHeadsetOutline } from "react-icons/io5";
 import { BsMusicPlayer } from "react-icons/bs";
-import { TfiLayoutLineSolid } from "react-icons/tfi";
 import { RiFullscreenLine } from "react-icons/ri";
 import { PiScreencast } from "react-icons/pi";
-import Logo from "../../assets/song-1.png";
 
 import { useContext } from "react";
 import { SongContext } from "../../context/SongContext";
 
 function MusicPlayer() {
   const { songDetails, isPlaying, setIsPlaying } = useContext(SongContext);
-  // const { songDetails } = useContext(SongContext);
 
   const audioRef = useRef(null);
   const progressRef = useRef(null);
-  // const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);

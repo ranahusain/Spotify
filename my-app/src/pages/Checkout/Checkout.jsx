@@ -2,6 +2,7 @@ import { PaymentElement } from "@stripe/react-stripe-js";
 import { useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import styles from "./Checkout.module.css";
+import { toast } from "react-toastify";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
@@ -20,16 +21,19 @@ export default function CheckoutForm() {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/`,
+        return_url: `${window.location.origin}/`, // will redirect on success
       },
     });
 
     if (error?.type === "card_error" || error?.type === "validation_error") {
       setMessage(error.message);
-    } else {
+      toast.error(error.message);
+    } else if (error) {
       setMessage("An unexpected error occurred.");
+      toast.error("An unexpected error occurred.");
+    } else {
+      toast.success("Payment successful!");
     }
-
     setIsProcessing(false);
   };
 

@@ -2,16 +2,18 @@ import styles from "./SignUp.module.css";
 import { BsSpotify } from "react-icons/bs";
 import { FaGithub } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { supabase } from "../../supabaseClient";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const [step, setStep] = useState(1);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const hasSynced = useRef(false); // prevent multiple syncs
   const navigate = useNavigate();
 
   const handleNext = (e) => {
@@ -37,14 +39,15 @@ const SignUp = () => {
           const loggedInUser = res.data.user;
           localStorage.setItem("user", JSON.stringify(loggedInUser));
           localStorage.setItem("token", res.data.token);
+          toast.success("Account created successfully!");
           return navigate("/");
         }
       } else {
-        console.log("SignUp failed");
+        toast.error("Sign up failed. Please try again.");
       }
-      return res.data;
     } catch (error) {
       console.log(error);
+      toast.error("Something went wrong during sign-up.");
     }
   };
 
@@ -59,11 +62,14 @@ const SignUp = () => {
       },
     });
     if (error) {
-      alert("Google sign-in error: " + error.message);
+      toast.error("Google sign-in error: " + error.message);
     }
   };
 
   const syncGoogleUser = async (user, session) => {
+    if (hasSynced.current) return;
+    hasSynced.current = true;
+
     try {
       const response = await axios.post(
         "http://localhost:5000/api/google-login",
@@ -81,10 +87,12 @@ const SignUp = () => {
         const { user: backendUser, token } = response.data;
         localStorage.setItem("user", JSON.stringify(backendUser));
         localStorage.setItem("token", token);
+        toast.success("Signed up with Google!");
         navigate("/");
       }
     } catch (error) {
       console.error("Google login failed:", error);
+      toast.error("Google sign-up failed.");
     }
   };
 

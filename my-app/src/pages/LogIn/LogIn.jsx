@@ -2,15 +2,17 @@ import styles from "./LogIn.module.css";
 import { BsSpotify } from "react-icons/bs";
 import { FaGithub } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { supabase } from "../../supabaseClient";
+import { toast } from "react-toastify";
 
 const LogIn = () => {
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const hasSynced = useRef(false); // google login was causing three success messages
 
   const navigate = useNavigate();
 
@@ -35,12 +37,14 @@ const LogIn = () => {
         const loggedInUser = res.data.user;
         localStorage.setItem("user", JSON.stringify(loggedInUser));
         localStorage.setItem("token", res.data.token);
+        toast.success("Logged in successfully!");
         navigate("/");
       } else {
-        console.log("Login failed");
+        toast.error("Login failed. Please check your credentials.");
       }
     } catch (error) {
       console.error(error);
+      toast.error("An error occurred during login.");
     }
   };
 
@@ -55,11 +59,14 @@ const LogIn = () => {
       },
     });
     if (error) {
-      alert("Google sign-in error: " + error.message);
+      toast.error("Google sign-in error: " + error.message);
     }
   };
 
   const syncGoogleUser = async (user, session) => {
+    if (hasSynced.current) return; //  Skip if already synced
+    hasSynced.current = true; //  Lock it
+
     try {
       const response = await axios.post(
         "http://localhost:5000/api/google-login",
@@ -81,21 +88,20 @@ const LogIn = () => {
         localStorage.setItem("token", token);
         const name = JSON.parse(localStorage.getItem("user"));
         localStorage.setItem("avatar", name.avatarURL);
+        toast.success("Google login successful!");
         navigate("/");
       }
-      console.log(user.avatarURL);
     } catch (error) {
       console.error("Google login failed:", error);
+      toast.error("Google login failed.");
     }
   };
 
   useEffect(() => {
-    // avoid double-setting if already logged in
     const isAlreadyLoggedIn =
       localStorage.getItem("user") && localStorage.getItem("token");
     if (isAlreadyLoggedIn) return;
 
-    // use onAuthStateChange as primary listener
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (event === "SIGNED_IN" && session) {
@@ -104,7 +110,6 @@ const LogIn = () => {
       }
     );
 
-    // fallback if session already exists (e.g., after redirect)
     const syncIfSessionExists = async () => {
       const {
         data: { session },
