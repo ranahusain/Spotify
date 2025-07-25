@@ -167,4 +167,35 @@ router.put("/update-avatar/:id", async (req, res) => {
   }
 });
 
+router.put("/isPremium/:id", async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { isPremium: true },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Premium updated successfully",
+      user: updatedUser,
+    });
+  } catch (err) {
+    console.error("Error updating premium status:", err);
+    res.status(500).json({
+      success: false,
+      message: "Server error while updating premium status",
+    });
+  }
+});
+
 module.exports = router;

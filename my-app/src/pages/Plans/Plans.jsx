@@ -4,11 +4,17 @@ import styles from "./Plans.module.css";
 import Payment from "../../pages/Payment/Payment";
 import PlanPageFooter from "../../components/PlanPageFooter/PlanPageFooter";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const Plans = () => {
   const [showPayment, setShowPayment] = useState(false);
 
   const handleOpenPayment = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please log in to purchase a premium plan");
+      return;
+    }
     setShowPayment(true);
   };
 
@@ -151,9 +157,9 @@ const Plans = () => {
             }}
           >
             <Payment />
-            <button onClick={handleClosePayment} className={styles.closeBtn}>
+            {/* <button onClick={handleClosePayment} className={styles.closeBtn}>
               Close
-            </button>
+            </button> */}
           </div>
         </div>
       )}

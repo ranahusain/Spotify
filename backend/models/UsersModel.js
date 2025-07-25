@@ -32,6 +32,10 @@ const UserSchema = new Schema({
     default:
       "https://bkbfkacpgdxbbunehdgi.supabase.co/storage/v1/object/public/songs/1753337121808.png",
   },
+  isPremium: {
+    type: Boolean,
+    default: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

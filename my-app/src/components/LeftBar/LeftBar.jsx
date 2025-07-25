@@ -11,19 +11,27 @@ const LeftBar = () => {
   const [name, setName] = useState("");
   const [owner, setOwner] = useState("");
 
+  const [isPremium, setisPremium] = useState(false);
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user && user._id) {
       setOwner(user._id || user.id || "");
+      setisPremium(user.isPremium);
     }
   }, []);
 
   const handlePlusClick = () => {
     setShowCreatePopup(!showCreatePopup);
   };
-
   const submitForm = async (e) => {
     e.preventDefault();
+
+    if (!isPremium) {
+      toast.error("You need to buy Premium to create a playlist.");
+      return;
+    }
+    console.log(isPremium);
     try {
       const res = await axios.post("http://localhost:5000/api/playlists", {
         name,
@@ -32,7 +40,7 @@ const LeftBar = () => {
       console.log(res.data);
       toast.success("Playlist created successfully!");
       setName("");
-      setShowCreatePopup(false); // optionally close popup
+      setShowCreatePopup(false);
     } catch (error) {
       console.log(error);
       toast.error("Failed to create playlist.");
