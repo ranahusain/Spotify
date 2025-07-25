@@ -4,7 +4,7 @@ import { FaSpotify } from "react-icons/fa";
 import { IoFolderOpenOutline } from "react-icons/io5";
 import { IoSearch } from "react-icons/io5";
 import { MdOutlineDownloading } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "../../supabaseClient";
 import { toast } from "react-toastify";
@@ -40,6 +40,28 @@ const Navbar = ({ showSearch = true }) => {
     }, 1500);
   };
 
+  const location = useLocation();
+  const [search, setSearch] = useState("");
+
+  // Keep input in sync with query param
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    setSearch(params.get("q") || "");
+  }, [location.search]);
+
+  //updates the URL when User types
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearch(value);
+    const params = new URLSearchParams(location.search);
+    if (value) {
+      params.set("q", value);
+    } else {
+      params.delete("q");
+    }
+    navigate({ search: params.toString() });
+  };
+
   return (
     <div>
       <nav className={styles.navbar}>
@@ -55,7 +77,12 @@ const Navbar = ({ showSearch = true }) => {
           {showSearch && (
             <div className={styles.search_bar}>
               <IoSearch className={styles.icon} />
-              <input type="text" placeholder="What do you want to play?" />
+              <input
+                type="text"
+                placeholder="What do you want to play?"
+                value={search}
+                onChange={handleSearchChange}
+              />
               <span className={styles.separator}>|</span>
               <IoFolderOpenOutline className={styles.icon} />
             </div>

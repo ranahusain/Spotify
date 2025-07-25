@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { SongContext } from "../../context/SongContext";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const RightBar = () => {
   const navigate = useNavigate();
@@ -17,11 +17,12 @@ const RightBar = () => {
     useContext(SongContext);
 
   const [songs, setSong] = useState([]);
+  const location = useLocation();
 
   useEffect(() => {
     const fetchsongs = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/getsong/");
+        const res = await axios.get("http://localhost:5000/api/getsong");
         setSong(res.data);
       } catch (error) {
         console.log("error in fetching songs");
@@ -29,6 +30,19 @@ const RightBar = () => {
     };
     fetchsongs();
   }, []);
+
+  // Get search query from URL
+  const params = new URLSearchParams(location.search);
+  const q = params.get("q") || "";
+
+  // Filter only for trending songs section
+  const filteredSongs = q
+    ? songs.filter(
+        (song) =>
+          song.songname?.toLowerCase().includes(q.toLowerCase()) ||
+          song.artist?.name?.toLowerCase().includes(q.toLowerCase())
+      )
+    : songs;
 
   const togglePlay = (song) => {
     if (songDetails.songURL === song.songURL) {
@@ -66,7 +80,7 @@ const RightBar = () => {
         <Link to="/TredingSongs">Show all</Link>
       </div>
       <div className={styles.song_grid}>
-        {songs.map((song) => (
+        {filteredSongs.map((song) => (
           <div className={styles.song_card} key={song._id}>
             <div className={styles.image_wrapper}>
               <img src={song.imageURL} alt={song.songname} />
