@@ -10,6 +10,7 @@ import { IoHeadsetOutline } from "react-icons/io5";
 import { BsMusicPlayer } from "react-icons/bs";
 import { RiFullscreenLine } from "react-icons/ri";
 import { PiScreencast } from "react-icons/pi";
+import { toast } from "react-toastify";
 
 import { useContext } from "react";
 import { SongContext } from "../../context/SongContext";
@@ -42,6 +43,13 @@ function MusicPlayer() {
   }, []);
 
   const togglePlay = () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      toast.warning("Please log in to play music");
+      return;
+    }
+
     const audio = audioRef.current;
     if (!audio) return;
 
@@ -57,6 +65,9 @@ function MusicPlayer() {
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
+
+    const token = localStorage.getItem("token");
+    if (!token) return;
 
     if (isPlaying) {
       audio.play().catch((err) => console.log("Playback error:", err));

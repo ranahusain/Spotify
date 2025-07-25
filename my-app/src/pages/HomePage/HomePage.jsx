@@ -34,8 +34,14 @@ const HomePage = () => {
             const user = JSON.parse(localStorage.getItem("user"));
             const userId = user._id;
 
-            await axios.put(`http://localhost:5000/api/isPremium/${userId}`);
+            await axios.put(`http://localhost:5000/api/isPremium/${userId}`, {
+              isPremium: true,
+            });
             toast.success("Payment successful!");
+            const { data } = await axios.get(
+              `http://localhost:5000/api/user/${userId}`
+            );
+            localStorage.setItem("user", JSON.stringify(data.user));
           } catch (error) {
             console.error("Error updating premium status:", error);
             toast.error("Something went wrong while upgrading.");

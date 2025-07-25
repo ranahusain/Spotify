@@ -98,6 +98,32 @@ router.get("/verify", auth, async (req, res) => {
   }
 });
 
+router.get("/user/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    user.password = undefined;
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (err) {
+    console.error("Error fetching user:", err);
+    res.status(500).json({
+      success: false,
+      message: "Server error while fetching user",
+    });
+  }
+});
+
 // routes/auth.js or similar
 // routes/auth.js or similar
 router.post("/google-login", async (req, res) => {
