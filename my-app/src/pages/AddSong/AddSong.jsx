@@ -53,87 +53,89 @@ const AddSong = () => {
   }, []);
 
   return (
-    <div className={styles.main_container}>
-      <div className={styles.container}>
-        <h1 className={styles.heading}>
-          Add a Song
-          <span>
-            <BsSpotify className={styles.logo} />
-          </span>
-        </h1>
+    <>
+      <div className={styles.main_container}>
+        <div className={styles.container}>
+          <h1 className={styles.heading}>
+            Add a Song
+            <span>
+              <BsSpotify className={styles.logo} />
+            </span>
+          </h1>
 
-        <form className={styles.form} onSubmit={submitForm}>
-          <label>Song Name</label>
-          <input
-            type="text"
-            placeholder="Blinding Lights"
-            required
-            value={songname}
-            onChange={(e) => setSongName(e.target.value)}
-          />
+          <form className={styles.form} onSubmit={submitForm}>
+            <label>Song Name</label>
+            <input
+              type="text"
+              placeholder="Blinding Lights"
+              required
+              value={songname}
+              onChange={(e) => setSongName(e.target.value)}
+            />
 
-          <label>Artist Name</label>
-          <input
-            type="text"
-            placeholder="The Weeknd"
-            required
-            value={artistName}
-            onChange={(e) => setArtistName(e.target.value)}
-          />
+            <label>Artist Name</label>
+            <input
+              type="text"
+              placeholder="The Weeknd"
+              required
+              value={artistName}
+              onChange={(e) => setArtistName(e.target.value)}
+            />
 
-          <label>Artist Image URL</label>
-          <input
-            type="text"
-            placeholder="https://..."
-            required
-            value={artistImageURL}
-            onChange={(e) => setArtistImageURL(e.target.value)}
-          />
-          <ImageUpload OnUpload={setArtistImageURL} />
+            <label>Artist Image URL</label>
+            <input
+              type="text"
+              placeholder="https://..."
+              required
+              value={artistImageURL}
+              onChange={(e) => setArtistImageURL(e.target.value)}
+            />
+            <ImageUpload OnUpload={setArtistImageURL} />
 
-          <label>Album Name (optional)</label>
-          <input
-            type="text"
-            placeholder="After Hours"
-            value={albumName}
-            onChange={(e) => setAlbumName(e.target.value)}
-          />
+            <label>Album Name (optional)</label>
+            <input
+              type="text"
+              placeholder="After Hours"
+              value={albumName}
+              onChange={(e) => setAlbumName(e.target.value)}
+            />
 
-          <label>Album Image URL (optional)</label>
-          <input
-            type="text"
-            placeholder="https://..."
-            value={albumImageURL}
-            onChange={(e) => setAlbumImageURL(e.target.value)}
-          />
-          <ImageUpload OnUpload={setAlbumImageURL} />
+            <label>Album Image URL (optional)</label>
+            <input
+              type="text"
+              placeholder="https://..."
+              value={albumImageURL}
+              onChange={(e) => setAlbumImageURL(e.target.value)}
+            />
+            <ImageUpload OnUpload={setAlbumImageURL} />
 
-          <label>Song Cover Image URL</label>
-          <input
-            type="text"
-            placeholder="https://..."
-            required
-            value={imageURL}
-            onChange={(e) => setImageURL(e.target.value)}
-          />
-          <ImageUpload OnUpload={setImageURL} />
+            <label>Song Cover Image URL</label>
+            <input
+              type="text"
+              placeholder="https://..."
+              required
+              value={imageURL}
+              onChange={(e) => setImageURL(e.target.value)}
+            />
+            <ImageUpload OnUpload={setImageURL} />
 
-          <label>Song URL</label>
-          <input
-            type="text"
-            placeholder="https://..."
-            required
-            value={songURL}
-            onChange={(e) => setSongURL(e.target.value)}
-          />
-          <SongUpload OnUpload={setSongURL} />
+            <label>Song URL</label>
+            <input
+              type="text"
+              placeholder="https://..."
+              required
+              value={songURL}
+              onChange={(e) => setSongURL(e.target.value)}
+            />
+            <SongUpload OnUpload={setSongURL} />
 
-          <button type="submit" className={styles.next_btn}>
-            Submit
-          </button>
-        </form>
+            <button type="submit" className={styles.next_btn}>
+              Submit
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

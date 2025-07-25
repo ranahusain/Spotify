@@ -129,10 +129,10 @@ const Plans = () => {
           <button className={styles.secondary} onClick={handleOpenPayment}>
             One-time payment
           </button>
-          <p className={styles.note}>
+          {/* <p className={styles.note}>
             agni dolore consequatur repellat modi. Repellendus, saepe quisquam!
             <a href="#">Terms apply</a>.
-          </p>
+          </p> */}
         </div>
       </div>
 
@@ -144,6 +144,11 @@ const Plans = () => {
           <div
             className={styles.modalContent}
             onClick={(e) => e.stopPropagation()}
+            style={{
+              overflow: "auto",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
           >
             <Payment />
             <button onClick={handleClosePayment} className={styles.closeBtn}>

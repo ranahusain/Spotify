@@ -155,7 +155,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(70, 70, 70, 0.433); /* semi-transparent blue */
+  background-color: rgba(70, 70, 70, 0.2); /* slightly transparent */
+  backdrop-filter: blur(8px); /* <-- this adds the blur */
+  -webkit-backdrop-filter: blur(8px); /* for Safari */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -171,13 +173,14 @@
   position: relative;
   z-index: 1000;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-  max-height: 60vh;
+  max-height: 80vh;
   overflow: auto;
 }
 
 .closeBtn {
   margin-top: 20px;
-  background-color: black;
+  margin-left: 25px;
+  background-color: #1ed760;
   color: white;
   padding: 10px 16px;
   border: none;
