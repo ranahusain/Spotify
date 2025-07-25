@@ -196,12 +196,16 @@ router.put("/update-avatar/:id", async (req, res) => {
 router.put("/isPremium/:id", async (req, res) => {
   try {
     const userId = req.params.id;
+    const { isPremium } = req.body;
 
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { isPremium: true },
-      { new: true }
-    );
+    const update = {
+      isPremium: !!isPremium,
+      premiumSince: !!isPremium ? new Date() : null,
+    };
+
+    const updatedUser = await User.findByIdAndUpdate(userId, update, {
+      new: true,
+    });
 
     if (!updatedUser) {
       return res.status(404).json({

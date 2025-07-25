@@ -4,6 +4,8 @@ const cors = require("cors");
 const users = require("./routes/UserRoutes");
 const songs = require("./routes/SongsRoutes");
 const playlists = require("./routes/PlaylistRoutes");
+const cronJob = require("./routes/cronJob");
+
 const path = require("path");
 
 const app = express();
@@ -58,6 +60,11 @@ app.post("/create-payment-intent", async (req, res) => {
       },
     });
   }
+});
+
+app.get("/test-cron", async (req, res) => {
+  await cronJob();
+  res.send("Cron job executed manually.");
 });
 
 const PORT = 5000;

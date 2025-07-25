@@ -36,6 +36,10 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  premiumSince: {
+    type: Date,
+    default: null,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

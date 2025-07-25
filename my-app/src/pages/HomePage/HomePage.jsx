@@ -26,7 +26,7 @@ const HomePage = () => {
       (status === "succeeded" || status === "failed") &&
       !hasHandledPayment.current
     ) {
-      hasHandledPayment.current = true; // mark as handled ✅
+      hasHandledPayment.current = true; // mark as handled
 
       const handlePayment = async () => {
         if (status === "succeeded") {
