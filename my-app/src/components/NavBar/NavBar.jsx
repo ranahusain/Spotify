@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "../../supabaseClient";
 import { toast } from "react-toastify";
 
-const Navbar = () => {
+const Navbar = ({ showSearch = true }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
@@ -52,12 +52,14 @@ const Navbar = () => {
             <GoHomeFill className={styles.nav_img_1} />
           </Link>
 
-          <div className={styles.search_bar}>
-            <IoSearch className={styles.icon} />
-            <input type="text" placeholder="What do you want to play?" />
-            <span className={styles.separator}>|</span>
-            <IoFolderOpenOutline className={styles.icon} />
-          </div>
+          {showSearch && (
+            <div className={styles.search_bar}>
+              <IoSearch className={styles.icon} />
+              <input type="text" placeholder="What do you want to play?" />
+              <span className={styles.separator}>|</span>
+              <IoFolderOpenOutline className={styles.icon} />
+            </div>
+          )}
         </div>
 
         <ul className={styles.nav_right}>

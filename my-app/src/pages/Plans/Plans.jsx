@@ -36,7 +36,7 @@ const Plans = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar showSearch={false} />
 
       <div className={styles.heading}>
         <h1>Experience the difference</h1>

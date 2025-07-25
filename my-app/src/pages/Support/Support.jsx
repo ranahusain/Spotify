@@ -15,7 +15,7 @@ const categories = [
 const Support = () => {
   return (
     <>
-      <Navbar />
+      <Navbar showSearch={false} />
 
       <div className={styles.container}>
         <p className={styles.supportHeader}>Spotify Support</p>
