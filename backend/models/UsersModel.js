@@ -40,10 +40,21 @@ const UserSchema = new Schema({
     type: Date,
     default: null,
   },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+  verificationCode: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
+  verficationToken: String,
+  resetPasswordToken: String,
+  resetPasswordExpiresAt: Date,
+  verficationTokenExpiresAt: Date,
 });
 
 const UserModel = model("User", UserSchema);

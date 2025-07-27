@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/UsersModel");
 const dotenv = require("dotenv");
 const auth = require("../middleware/auth");
+const SendVerificationCode = require("../middleware/email");
 
 dotenv.config();
 
@@ -12,6 +13,9 @@ dotenv.config();
 router.post("/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
+    const verificationCode = Math.floor(
+      100000 + Math.random() * 900000
+    ).toString();
 
     //check if the user already exists
     const existingUser = await User.findOne({ email });
@@ -25,8 +29,14 @@ router.post("/signup", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     //save the new user
-    const newUser = new User({ name, email, password: hashedPassword });
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      verificationCode,
+    });
     await newUser.save();
+    SendVerificationCode(newUser.email, verificationCode);
 
     //generate the jwt token
     const token = jwt.sign({ id: newUser._id }, process.env.JWTSECRET, {
@@ -225,6 +235,35 @@ router.put("/isPremium/:id", async (req, res) => {
       success: false,
       message: "Server error while updating premium status",
     });
+  }
+});
+
+// verify the email
+
+router.post("/verify-code", async (req, res) => {
+  const { email, code } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.status(404).json({ success: false, message: "User not found" });
+  }
+
+  console.log("User's code in DB:", user.verificationCode);
+  console.log("Code from request:", code);
+
+  if (user.verificationCode === code) {
+    user.isVerified = true;
+    user.verificationCode = undefined;
+    await user.save();
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Email verified successfully" });
+  } else {
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid verification code" });
   }
 });
 
