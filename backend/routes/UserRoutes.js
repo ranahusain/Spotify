@@ -5,7 +5,10 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/UsersModel");
 const dotenv = require("dotenv");
 const auth = require("../middleware/auth");
-const SendVerificationCode = require("../middleware/email");
+const {
+  SendVerificationCode,
+  SendWelcomeEmail,
+} = require("../middleware/email");
 
 dotenv.config();
 
@@ -256,10 +259,21 @@ router.post("/verify-code", async (req, res) => {
     user.isVerified = true;
     user.verificationCode = undefined;
     await user.save();
+    await SendWelcomeEmail(user.email, user.name);
 
-    return res
-      .status(200)
-      .json({ success: true, message: "Email verified successfully" });
+    // Generate JWT token for immediate login after verification
+    const token = jwt.sign({ id: user._id }, process.env.JWTSECRET, {
+      expiresIn: "2h",
+    });
+    user.token = token;
+    user.password = undefined;
+
+    return res.status(200).json({
+      success: true,
+      message: "Email verified successfully",
+      user,
+      token,
+    });
   } else {
     return res
       .status(400)

@@ -13,6 +13,9 @@ const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
+  const [isVerificationStep, setIsVerificationStep] = useState(false);
+
   const hasSynced = useRef(false); // prevent multiple syncs
   const navigate = useNavigate();
 
@@ -25,29 +28,121 @@ const SignUp = () => {
     }
   };
 
+  // const submitForm = async (e) => {
+  //   if (!isVerificationStep) {
+  //     try {
+  //       const res = await axios.post("http://localhost:5000/api/signup/", {
+  //         name,
+  //         email,
+  //         password,
+  //       });
+
+  //       if (res.data.success) {
+  //         toast.success("Verification code sent to your email!");
+  //         setIsVerificationStep(true); // enable verification UI
+  //         return; // ⛔️ Don't go further yet
+  //       } else {
+  //         toast.error("Signup failed. Try again.");
+  //         return;
+  //       }
+  //     } catch (err) {
+  //       console.log(err);
+  //       toast.error("Something went wrong during sign-up.");
+  //       return;
+  //     }
+  //   }
+
+  //   e.preventDefault();
+  //   const newUser = { name, email, password };
+  //   try {
+  //     const res = await axios.post(
+  //       "http://localhost:5000/api/signup/",
+  //       newUser
+  //     );
+
+  //     if (res.data.success) {
+  //       if (isVerificationStep) {
+  //         try {
+  //           const res = await axios.post(
+  //             "http://localhost:5000/api/verify-email",
+  //             {
+  //               email,
+  //               code: verificationCode,
+  //             }
+  //           );
+
+  //           if (res.status === 200) {
+  //             toast.success("Email verified! Welcome email sent.");
+  //           } else {
+  //             toast.error("Invalid verification code.");
+  //             return;
+  //           }
+  //         } catch (err) {
+  //           toast.error("Verification failed. Try again.");
+  //           return;
+  //         }
+  //       }
+
+  //       if (res.data.token) {
+  //         const loggedInUser = res.data.user;
+  //         localStorage.setItem("user", JSON.stringify(loggedInUser));
+  //         localStorage.setItem("token", res.data.token);
+  //         toast.success("Account created successfully!");
+  //         return navigate("/");
+  //       }
+  //     } else {
+  //       toast.error("Sign up failed. Please try again.");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error("Something went wrong during sign-up.");
+  //   }
+  // };
+
   const submitForm = async (e) => {
     e.preventDefault();
-    const newUser = { name, email, password };
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/api/signup/",
-        newUser
-      );
 
-      if (res.data.success) {
-        if (res.data.token) {
-          const loggedInUser = res.data.user;
-          localStorage.setItem("user", JSON.stringify(loggedInUser));
-          localStorage.setItem("token", res.data.token);
-          toast.success("Account created successfully!");
-          return navigate("/");
+    if (!isVerificationStep) {
+      try {
+        const res = await axios.post("http://localhost:5000/api/signup/", {
+          name,
+          email,
+          password,
+        });
+
+        if (res.data.success) {
+          toast.success("Verification code sent to your email!");
+          setIsVerificationStep(true);
+        } else {
+          toast.error("Signup failed. Try again.");
         }
-      } else {
-        toast.error("Sign up failed. Please try again.");
+      } catch (err) {
+        console.log(err);
+        toast.error("Something went wrong during sign-up.");
       }
-    } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong during sign-up.");
+    } else {
+      try {
+        const res = await axios.post("http://localhost:5000/api/verify-code", {
+          email,
+          code: verificationCode,
+        });
+
+        if (res.status === 200) {
+          toast.success("Email verified! Welcome email sent.");
+
+          const user = res.data.user;
+          const token = res.data.token;
+
+          localStorage.setItem("user", JSON.stringify(user));
+          localStorage.setItem("token", token);
+
+          navigate("/");
+        } else {
+          toast.error("Invalid verification code.");
+        }
+      } catch (err) {
+        toast.error("Verification failed. Try again.");
+      }
     }
   };
 
@@ -135,7 +230,10 @@ const SignUp = () => {
             start listening
           </h1>
 
-          <form className={styles.form} onSubmit={handleNext}>
+          <form
+            className={styles.form}
+            onSubmit={isVerificationStep ? submitForm : handleNext}
+          >
             {step >= 1 && (
               <>
                 <label>Name</label>
@@ -177,10 +275,29 @@ const SignUp = () => {
                 />
               </>
             )}
+            {isVerificationStep && (
+              <>
+                <label>Verification Code</label>
+                <input
+                  type="text"
+                  name="verificationCode"
+                  placeholder="Enter code from email"
+                  required
+                  value={verificationCode}
+                  onChange={(e) => setVerificationCode(e.target.value)}
+                />
+              </>
+            )}
 
-            <button type="submit" className={styles.next_btn}>
-              {step < 3 ? "Next" : "Sign Up"}
-            </button>
+            {!isVerificationStep ? (
+              <button type="submit" className={styles.next_btn}>
+                {step < 3 ? "Next" : "Sign Up"}
+              </button>
+            ) : (
+              <button type="submit" className={styles.next_btn}>
+                Verify Email
+              </button>
+            )}
           </form>
 
           <div className={styles.divider}>
